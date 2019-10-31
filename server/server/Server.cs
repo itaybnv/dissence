@@ -10,10 +10,7 @@ namespace server
     {
         static void Main(string[] args)
         {
-            DownloadHandler test = new DownloadHandler();
-            SearchHandler test2 = new SearchHandler();
-
-            test.ByVideo(test2.ByTitle("disguised toast", 5)[0]);
+            
         }
     }
 }
