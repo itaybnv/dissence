@@ -14,11 +14,11 @@ using Google.Apis.YouTube.v3.Data;
 
 namespace server
 {
-    class Search
+    class SearchHandler
     {
         private YouTubeService youtubeService;
 
-        public Search()
+        public SearchHandler()
         {
             // Create a connection with youtube service
             youtubeService = new YouTubeService(new BaseClientService.Initializer()
