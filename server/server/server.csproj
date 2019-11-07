@@ -51,8 +51,8 @@
     <Reference Include="Google.Apis.YouTube.v3, Version=1.41.1.1699, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>packages\Google.Apis.YouTube.v3.1.41.1.1699\lib\net45\Google.Apis.YouTube.v3.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NYoutubeDL, Version=0.10.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NYoutubeDL.0.10.8\lib\netstandard2.0\NYoutubeDL.dll</HintPath>
@@ -67,10 +67,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channel.cs" />
     <Compile Include="DownloadHandler.cs" />
+    <Compile Include="getConnectedUsersPacket.cs" />
+    <Compile Include="Packet.cs" />
+    <Compile Include="PacketDecoder.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchHandler.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>

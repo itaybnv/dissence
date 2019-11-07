@@ -9,22 +9,20 @@ namespace server
 {
     enum PacketType
     {
-        getConnectedUsers,
+        getConnectedUsers
     }
 
     abstract class Packet
     {
-        private PacketType type;
-        protected string data;
+        protected PacketType type;
+        protected Dictionary<string, string> data;
         
-        public Packet(PacketType type)
+        public Packet(PacketType type, Dictionary<string, string> data)
         {
             this.type = type;
+            this.data = data;
         }
 
-        public abstract Packet Execute()
-        {
-
-        };
+        public abstract Packet Execute();
     }
 }
