@@ -69,8 +69,8 @@
   <ItemGroup>
     <Compile Include="Channel.cs" />
     <Compile Include="DownloadHandler.cs" />
-    <Compile Include="getConnectedUsersPacket.cs" />
-    <Compile Include="Packet.cs" />
+    <Compile Include="packets\getConnectedUsersPacket.cs" />
+    <Compile Include="packets\Packet.cs" />
     <Compile Include="PacketDecoder.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
