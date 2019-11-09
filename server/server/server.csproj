@@ -72,6 +72,7 @@
     <Compile Include="packets\getConnectedUsersPacket.cs" />
     <Compile Include="packets\Packet.cs" />
     <Compile Include="PacketDecoder.cs" />
+    <Compile Include="packets\ResponsePacket.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchHandler.cs" />

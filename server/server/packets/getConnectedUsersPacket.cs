@@ -1,4 +1,5 @@
-﻿using System;
+﻿using server.packets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,19 @@ namespace server
 {
     class GetConnectedUsersPacket : Packet
     {
-        public GetConnectedUsersPacket(Dictionary<string, string> data) : base(PacketType.getConnectedUsers, data)
+        public GetConnectedUsersPacket(Dictionary<string, object> data) : base(PacketType.getConnectedUsers, data)
         {
+
         }
 
-        public override Packet Execute()
+        public override ResponsePacket Execute(User user)
         {
-            throw new NotImplementedException();
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("users", Server.channel.userList);
+
+            ResponsePacket responsePacket = new ResponsePacket(data);
+
+            return responsePacket;
         }
     }
 }

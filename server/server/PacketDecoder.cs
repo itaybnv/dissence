@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using server.packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace server
 
         public static Packet DecodePacket(byte[] packet, int packetType)
         {
-            Dictionary<string, string> dataDict;
+            Dictionary<string, object> dataDict;
             Packet readyPacket;
             string packetDataJson;
             object[] parameters;
@@ -27,7 +28,7 @@ namespace server
             packetDataJson = Encoding.UTF8.GetString(packet, 0, packet.Length);
 
             // Convert from Json string to dict for ease of use
-            dataDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(packetDataJson);
+            dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(packetDataJson);
 
             // Get the type of packet needed to instantiate
             type = packetTypes[(PacketType)packetType];
@@ -39,6 +40,11 @@ namespace server
             readyPacket = (Packet)Activator.CreateInstance(type, parameters);
 
             return readyPacket;
+        }
+
+        public static byte[] EncodeResponsePacket(ResponsePacket packet)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(packet.data));
         }
     }
 }

@@ -14,6 +14,7 @@ namespace server
         public Channel()
         {
             videoQueue = new List<Video>();
+            userList = new List<User>();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using server.packets;
 
 namespace server
 {
@@ -17,8 +18,8 @@ namespace server
         static void Main(string[] args)
         {
             channel = new Channel();
-            //Execute();
             Execute();
+
         }
 
         public static void Execute()
@@ -54,7 +55,12 @@ namespace server
                     // Suspend while waiting for incoming connection Using
                     // Accept() method the server will accept connection of client 
                     Socket clientSocket = listener.Accept();
-                    new Thread(() => ClientHandler(clientSocket)).Start();
+
+                    // Create user and add to channel list
+                    User user = new User(clientSocket);
+
+                    // Open a new thread for the user
+                    new Thread(() => ClientHandler(user)).Start();
                     
                 }
             }
@@ -65,10 +71,10 @@ namespace server
             }
         }
 
-        public static void ClientHandler(Socket clientSocket)
+        public static void ClientHandler(User user)
         {
             // Contains the ip, port and other info about the client socket
-            IPEndPoint remoteIpEndPoint = clientSocket.RemoteEndPoint as IPEndPoint;
+            IPEndPoint remoteIpEndPoint;
 
             // Data packet
             byte[] packetBuffer;
@@ -82,14 +88,16 @@ namespace server
 
             // Packet stored in correct object
             Packet packet;
+            ResponsePacket responsePacket;
 
-            
+            remoteIpEndPoint = user.socket.RemoteEndPoint as IPEndPoint;
+
             Console.WriteLine($"Connection from {remoteIpEndPoint.Address.MapToIPv4()}:{remoteIpEndPoint.Port}");
 
-            while (clientSocket.Connected)
+            while (user.socket.Connected)
             {
                 // If the byte count of the length packet is not 5, ignore this packet
-                if (clientSocket.Receive(packetHeaderBuffer) != 5)
+                if (user.socket.Receive(packetHeaderBuffer) != 5)
                     continue;
                 
                 // If the system architecture is little-endian ( little end first in array )
@@ -107,11 +115,13 @@ namespace server
                 packetBuffer = new byte[packetLen];
 
                 // Receive data packet
-                clientSocket.Receive(packetBuffer);
+                user.socket.Receive(packetBuffer);
 
                 packet = PacketDecoder.DecodePacket(packetBuffer, packetType);
 
-                packet.Execute();
+                responsePacket = packet.Execute(user);
+
+                user.socket.Send(PacketDecoder.EncodeResponsePacket(responsePacket));
 
             }
 
