@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace server
 {
-    class PacketDecoder
+    class PacketEncoding
     {
         // Map dictionary that maps packet types to their packet object
         private static readonly Dictionary<PacketType, Type> packetTypes = new Dictionary<PacketType, Type> {

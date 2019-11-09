@@ -117,11 +117,11 @@ namespace server
                 // Receive data packet
                 user.socket.Receive(packetBuffer);
 
-                packet = PacketDecoder.DecodePacket(packetBuffer, packetType);
+                packet = PacketEncoding.DecodePacket(packetBuffer, packetType);
 
                 responsePacket = packet.Execute(user);
 
-                user.socket.Send(PacketDecoder.EncodeResponsePacket(responsePacket));
+                user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
 
             }
 
