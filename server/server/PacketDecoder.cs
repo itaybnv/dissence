@@ -11,7 +11,7 @@ namespace server
     {
         // Map dictionary that maps packet types to their packet object
         private static readonly Dictionary<PacketType, Type> packetTypes = new Dictionary<PacketType, Type> {
-            { PacketType.getConnectedUsers, typeof(Channel) }
+            { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) }
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)
@@ -33,7 +33,7 @@ namespace server
             type = packetTypes[(PacketType)packetType];
 
             // Set the parameters of the packet object
-            parameters = new object[2] { type, dataDict };
+            parameters = new object[1] { dataDict };
 
             // Create an object of type packetType, and pass the tye 
             readyPacket = (Packet)Activator.CreateInstance(type, parameters);

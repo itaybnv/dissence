@@ -8,7 +8,7 @@ namespace server
 {
     class GetConnectedUsersPacket : Packet
     {
-        public GetConnectedUsersPacket() : base(PacketType.getConnectedUsers)
+        public GetConnectedUsersPacket(Dictionary<string, string> data) : base(PacketType.getConnectedUsers, data)
         {
         }
 

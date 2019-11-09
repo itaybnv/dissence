@@ -17,6 +17,7 @@ namespace server
         static void Main(string[] args)
         {
             channel = new Channel();
+            //Execute();
             Execute();
         }
 
@@ -109,6 +110,8 @@ namespace server
                 clientSocket.Receive(packetBuffer);
 
                 packet = PacketDecoder.DecodePacket(packetBuffer, packetType);
+
+                packet.Execute();
 
             }
 

@@ -14,8 +14,8 @@ namespace server
 
     abstract class Packet
     {
-        protected PacketType type;
-        protected Dictionary<string, string> data;
+        public PacketType type { get; }
+        public Dictionary<string, string> data { get; }
         
         public Packet(PacketType type, Dictionary<string, string> data)
         {
