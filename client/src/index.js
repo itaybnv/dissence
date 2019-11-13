@@ -1,6 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App.jsx';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.scss";
+import App from "./App.jsx";
+import { ThemeProvider } from "@rmwc/theme";
+import options from "./themeOptions";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let app = (
+  <ThemeProvider options={options}>
+    <App />
+  </ThemeProvider>
+);
+
+ReactDOM.render(app, document.getElementById("root"));
