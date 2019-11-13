@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App.jsx";
 import { ThemeProvider } from "@rmwc/theme";
-import options from "./themeOptions";
+import options from "./misc/themeOptions";
 
 let app = (
   <ThemeProvider options={options}>
