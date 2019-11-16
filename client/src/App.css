@@ -1,3 +1,18 @@
-.App {
-  text-align: center;
+.dissence-app-container {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.dissence-main-container {
+  flex-grow: 1;
+
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.dissence-footer-container {
+  height: 80px;
 }

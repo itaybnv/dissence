@@ -1,0 +1,32 @@
+.dissence-play-button,
+.dissence-skip-button {
+  margin: 10px;
+}
+
+.dissence-controlbar-container {
+  height: 100%;
+  background: #282828;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dissence-media-control-container {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.dissence-volume-control-container {
+  flex-basis: 80px;
+  margin-right: 20px;
+}
+
+.dissence-progress-bar-container {
+  width: 400px;
+}
+
+.dissence-media-buttons-container {
+  display: flex;
+  justify-content: center;
+}
