@@ -7,6 +7,7 @@
 		"electron-is-dev": "^1.1.0",
 		"node-sass": "^4.13.0",
 		"react": "^16.11.0",
+		"react-custom-scrollbars": "^4.2.1",
 		"react-dom": "^16.11.0",
 		"react-scripts": "3.2.0",
 		"rmwc": "^5.7.1"
