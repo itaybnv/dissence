@@ -1,13 +1,36 @@
 import React, { Component } from "react";
 
 import { Fab } from "@rmwc/fab";
-//import { Icon } from "@rmwc/icon";
+import { Icon } from "@rmwc/icon";
 import { Slider } from "@rmwc/slider";
 import { LinearProgress } from "@rmwc/linear-progress";
 
 import "./DissenceControlBar.scss";
 
 export default class DissenceControlBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      volumeValue: 0.5,
+      volumeIcon: "volume_down"
+    };
+  }
+
+  changeVolume = value => {
+    this.setState({ volumeValue: value });
+
+    // set the volume icon
+    if (this.state.volumeValue === 0) {
+      this.setState({ volumeIcon: "volume_off" });
+    } else if (this.state.volumeValue > 0 && this.state.volumeValue <= 33) {
+      this.setState({ volumeIcon: "volume_mute" });
+    } else if (this.state.volumeValue > 33 && this.state.volumeValue <= 66) {
+      this.setState({ volumeIcon: "volume_down" });
+    } else {
+      this.setState({ volumeIcon: "volume_up" });
+    }
+  };
+
   render() {
     return (
       <div className="dissence-controlbar-container">
@@ -26,7 +49,16 @@ export default class DissenceControlBar extends Component {
           </div>
         </div>
         <div className="dissence-volume-control-container">
-          <Slider></Slider>
+          <Icon
+            style={{ color: "white", transition: "all 1s" }}
+            icon={this.state.volumeIcon}
+          ></Icon>
+          <Slider
+            className="dissence-volume-slider"
+            value={this.state.volumeValue}
+            onChange={evt => this.changeVolume(evt.detail.value)}
+            onInput={evt => this.changeVolume(evt.detail.value)}
+          ></Slider>
         </div>
       </div>
     );

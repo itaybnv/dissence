@@ -20,6 +20,9 @@
 .dissence-volume-control-container {
   flex-basis: 80px;
   margin-right: 20px;
+
+  display: flex;
+  align-items: center;
 }
 
 .dissence-progress-bar-container {
@@ -29,4 +32,10 @@
 .dissence-media-buttons-container {
   display: flex;
   justify-content: center;
+}
+
+.dissence-volume-slider {
+  margin: 10px;
+  width: 80px;
+  height: 48px;
 }
