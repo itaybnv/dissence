@@ -3,7 +3,7 @@ import "./App.css";
 
 import DissenceToolbar from "./components/DissenceToolbar";
 import DissenceUsersList from "./components/DissenceUsersList";
-import DissenceSongQueue from "./components/DissenceSongQueue";
+import DissencePlaylist from "./components/DissencePlaylist";
 import DissenceControlBar from "./components/DissenceControlBar";
 import DissenceSearchContent from "./components/DissenceSearchContent";
 
@@ -15,7 +15,7 @@ function App() {
       </div>
 
       <div className="dissence-main-container">
-        <DissenceSongQueue />
+        <DissencePlaylist />
         <DissenceSearchContent />
         <DissenceUsersList />
       </div>
