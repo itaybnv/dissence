@@ -4,13 +4,15 @@
 	"main": "public/electron.js",
 	"private": true,
 	"dependencies": {
+		"async-lock": "^1.2.2",
 		"electron-is-dev": "^1.1.0",
 		"node-sass": "^4.13.0",
 		"react": "^16.11.0",
 		"react-custom-scrollbars": "^4.2.1",
 		"react-dom": "^16.11.0",
 		"react-scripts": "3.2.0",
-		"rmwc": "^5.7.1"
+		"rmwc": "^5.7.1",
+		"wait-queue": "^1.1.2"
 	},
 	"scripts": {
 		"react-start": "react-scripts start",
