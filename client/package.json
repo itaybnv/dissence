@@ -11,6 +11,7 @@
 		"react-custom-scrollbars": "^4.2.1",
 		"react-dom": "^16.11.0",
 		"react-scripts": "3.2.0",
+		"react-ticker": "^1.2.1",
 		"rmwc": "^5.7.1",
 		"wait-queue": "^1.1.2"
 	},
