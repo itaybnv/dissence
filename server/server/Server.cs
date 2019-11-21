@@ -19,7 +19,6 @@ namespace server
         {
             channel = new Channel();
             Execute();
-
         }
 
         public static void Execute()
@@ -27,8 +26,10 @@ namespace server
             // Establish the local endpoint for the socket. Dns.GetHostName 
             // returns the name of the host running the application 
             IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddr = ipHost.AddressList[0];
+            //IPAddress ipAddr = ipHost.AddressList[0];
+            IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
             const int port = 27015;
+            Console.WriteLine(ipAddr.MapToIPv4());
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
             // Creation TCP/IP Socket using  

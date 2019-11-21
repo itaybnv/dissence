@@ -1,10 +1,10 @@
-import Socket from "./Socket";
+import SocketWrapper from "./SocketWrapper";
 import AsyncLock from "async-lock";
 import WaitQueue from "wait-queue";
 
 class NetworkController {
 	HEADER_LENGTH = 5;
-	socket = new Socket();
+	socket = new SocketWrapper();
 	lock = new AsyncLock();
 	responseQueue = new WaitQueue();
 	eventHandlers = {};
@@ -37,7 +37,7 @@ class NetworkController {
 	send = (buffer, packetType) => {
 		// Convert packet length from int to buffer
 		const lengthBuffer = Buffer.alloc(4);
-		new DataView(b).setUint32(0, buffer.length);
+		new DataView(lengthBuffer).setUint32(0, buffer.length);
 
 		// Set the packet type in a buffer to get it ready for concat
 		// with the rest of the header
