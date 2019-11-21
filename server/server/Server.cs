@@ -28,7 +28,8 @@ namespace server
             // returns the name of the host running the application 
             IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 11000);
+            const int port = 27015;
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
             // Creation TCP/IP Socket using  
             // Socket Class Costructor 
