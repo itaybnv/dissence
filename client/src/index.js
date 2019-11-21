@@ -10,11 +10,10 @@ import networkController from "./networking/NetworkController";
 networkController.connect().then(
 	() => {
 		console.log("Connected to server succesfully");
-	},
-	error => {
-		console.log("failed connection: " + error);
 	}
-);
+).catch(error => {
+  console.log("error: " + error)
+});
 
 let app = (
 	<ThemeProvider options={options}>

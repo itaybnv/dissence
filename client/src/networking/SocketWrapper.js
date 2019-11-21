@@ -6,12 +6,12 @@ export default class SocketWrapper {
 
 	connect = (ip, port) =>
 		new Promise((resolve, reject) => {
-			try {
-				this.socket.connect(port, ip);
-			} catch (error) {
-				reject(error);
-			}
-			resolve();
+			this.socket.on("error", error => {
+				if (error.message.includes("ECONNREFUSED")) {
+					reject(error);
+				}
+			});
+			this.socket.connect(port, ip, resolve);
 		});
 
 	send = buffer =>

@@ -1,6 +1,7 @@
 import SocketWrapper from "./SocketWrapper";
 import AsyncLock from "async-lock";
 import WaitQueue from "wait-queue";
+import arrayBufferToBuffer from "arraybuffer-to-buffer";
 
 class NetworkController {
 	HEADER_LENGTH = 5;
@@ -16,7 +17,7 @@ class NetworkController {
 			data = data.slice(1);
 
 			if (packetType < 200) {
-				this.responseQueue.push(data);
+				this.responseQueue.push({packetType, data});
 			} else {
 				//route event to correct handler/s
 				// try in case there are no eventhandlers registered
@@ -36,8 +37,9 @@ class NetworkController {
 
 	send = (buffer, packetType) => {
 		// Convert packet length from int to buffer
-		const lengthBuffer = Buffer.alloc(4);
+		let lengthBuffer = new ArrayBuffer(4);
 		new DataView(lengthBuffer).setUint32(0, buffer.length);
+		lengthBuffer = arrayBufferToBuffer(lengthBuffer);
 
 		// Set the packet type in a buffer to get it ready for concat
 		// with the rest of the header
@@ -67,6 +69,6 @@ class NetworkController {
 	};
 }
 
-// acts as a singlet on
+// Acts as a singleton
 const networkController = new NetworkController();
 export default networkController;
