@@ -51,7 +51,7 @@ namespace server
                     resultList.Add(new Video(searchResult.Snippet.Title,
                                              searchResult.Snippet.ChannelTitle,
                                              searchResult.Id.VideoId,
-                                             searchResult.Snippet.Thumbnails.Default__.Url));
+                                             searchResult.Snippet.Thumbnails.Medium.Url));
                 }
             }
 
