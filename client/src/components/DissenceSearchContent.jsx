@@ -8,7 +8,6 @@ import { Scrollbars } from "react-custom-scrollbars";
 export default class DissenceSearchContent extends Component {
 
 	render() {
-		console.log(this.props.searchResults);
 		return (
 			<div className="dissence-search-content-container">
 				<Scrollbars>
@@ -19,6 +18,7 @@ export default class DissenceSearchContent extends Component {
 								channelTitle={video.ChannelTitle}
 								videoTitle={video.Title}
 								videoThumbnailUrl={video.ThumbnailUrl}
+								videoDuration={video.VideoLength}
 							/>
 						))}
 					</div>

@@ -139,8 +139,6 @@ namespace server
 
                 responsePacket = packet.Execute(user);
 
-                Console.WriteLine(Encoding.UTF8.GetString(packetBuffer, 0, packetBuffer.Length));
-                Console.WriteLine(Encoding.UTF8.GetString(PacketEncoding.EncodeResponsePacket(responsePacket), 0, PacketEncoding.EncodeResponsePacket(responsePacket).Length));
                 user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
 
             }

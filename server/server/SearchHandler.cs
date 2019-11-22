@@ -42,19 +42,35 @@ namespace server
             // Execute search request
             var searchListResponse = searchListRequest.Execute();
 
-            // Instantiate a video object for each search result and add
-            // it to the result list
+            // Make another request to the api to get the content details
+            // and from there extract the video duration
+            var videosListRequest = youtubeService.Videos.List("contentDetails");
+            
+            // String all the video ids
             foreach (var searchResult in searchListResponse.Items)
             {
-                if(searchResult.Id.Kind == "youtube#video")
+                videosListRequest.Id += searchResult.Id.VideoId + ",";
+            }
+            // Remove the last comma
+            videosListRequest.Id = videosListRequest.Id.Remove(videosListRequest.Id.Length - 1);
+            Console.WriteLine(videosListRequest.Id);
+            var videosListResponse = videosListRequest.Execute();
+
+            // Instantiate a video object for each search result and add
+            // it to the result list
+            for (int i = 0; i < searchListResponse.Items.Count; i++)
+            {
+                var searchResult = searchListResponse.Items[i];
+                var videoResult = videosListResponse.Items[i];
+                if (searchResult.Id.Kind == "youtube#video")
                 {
                     resultList.Add(new Video(searchResult.Snippet.Title,
                                              searchResult.Snippet.ChannelTitle,
                                              searchResult.Id.VideoId,
-                                             searchResult.Snippet.Thumbnails.Medium.Url));
+                                             searchResult.Snippet.Thumbnails.Medium.Url,
+                                             videoResult.ContentDetails.Duration));
                 }
             }
-
             return resultList;
         }
     }

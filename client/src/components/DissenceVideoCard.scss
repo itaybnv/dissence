@@ -1,0 +1,49 @@
+.dissence-video-card-container {
+	margin: 5px;
+	width: 246px;
+	border-radius: 3px;
+
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.dissence-video-card-thumbnail-container {
+	width: 246px;
+	height: 138px;
+}
+
+.dissence-Video-card-image {
+	width: 246px;
+	height: 138px;
+
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.dissence-video-card-duration {
+	position: relative;
+	left: 0;
+	bottom: 27px;
+	background: rgba(0, 0, 0, 0.47);
+	color: white;
+	padding: 3px;
+	border-radius: 3px;
+	margin: 0 0 0 3px;
+}
+
+.dissence-video-info-container {
+	flex-grow: 1;
+
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+}
+
+.dissence-video-card-title,
+.dissence-video-card-channel {
+	margin: 0;
+	margin-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	line-height: 1.4rem;
+}
