@@ -38,14 +38,12 @@ namespace server
             searchListRequest.MaxResults = resultAmount;
             // Limit the results to video only
             searchListRequest.Type = "video";
-
             // Execute search request
             var searchListResponse = searchListRequest.Execute();
 
             // Make another request to the api to get the content details
             // and from there extract the video duration
             var videosListRequest = youtubeService.Videos.List("contentDetails");
-            
             // String all the video ids
             foreach (var searchResult in searchListResponse.Items)
             {
@@ -53,7 +51,7 @@ namespace server
             }
             // Remove the last comma
             videosListRequest.Id = videosListRequest.Id.Remove(videosListRequest.Id.Length - 1);
-            Console.WriteLine(videosListRequest.Id);
+            // Execute request
             var videosListResponse = videosListRequest.Execute();
 
             // Instantiate a video object for each search result and add
