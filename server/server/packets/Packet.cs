@@ -10,7 +10,8 @@ namespace server
 {
     enum PacketType
     {
-        getConnectedUsers
+        getConnectedUsers,
+        getSearchResults
     }
 
     abstract class Packet

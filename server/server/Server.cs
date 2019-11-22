@@ -80,8 +80,13 @@ namespace server
 
             // Data packet
             byte[] packetBuffer;
-            // Length of the next packet (byte array)
+            // Packet header byte array
             byte[] packetHeaderBuffer = new byte[5];
+            // Length of the next packet
+            byte[] packetLengthBuffer = new byte[4];
+            // Type of the next packet
+            byte packetTypeByte;
+        
 
             // Length of the next packet (int)
             int packetLen;
@@ -101,11 +106,12 @@ namespace server
                 // If the byte count of the length packet is not 5, ignore this packet
                 if (user.socket.Receive(packetHeaderBuffer) != 5)
                     continue;
-                
+
+
                 // If the system architecture is little-endian ( little end first in array )
                 // reverse the byte array.
                 if (BitConverter.IsLittleEndian)
-                    Array.Reverse(packetHeaderBuffer);
+                    Array.Reverse(packetHeaderBuffer, 0, 4);
 
                 // Get packet len from first 4 bytes of packet header buffer
                 packetLen = BitConverter.ToInt32(packetHeaderBuffer, 0);
@@ -123,6 +129,8 @@ namespace server
 
                 responsePacket = packet.Execute(user);
 
+                Console.WriteLine(Encoding.UTF8.GetString(packetBuffer, 0, packetBuffer.Length));
+                Console.WriteLine(Encoding.UTF8.GetString(PacketEncoding.EncodeResponsePacket(responsePacket), 0, PacketEncoding.EncodeResponsePacket(responsePacket).Length));
                 user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
 
             }

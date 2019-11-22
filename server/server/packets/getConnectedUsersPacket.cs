@@ -19,7 +19,7 @@ namespace server
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("users", Server.channel.userList);
 
-            ResponsePacket responsePacket = new ResponsePacket(data);
+            ResponsePacket responsePacket = new ResponsePacket(data, PacketType.getConnectedUsers);
 
             return responsePacket;
         }

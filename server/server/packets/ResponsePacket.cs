@@ -6,15 +6,25 @@ using System.Threading.Tasks;
 
 namespace server.packets
 {
+    
+    enum ReceiveType
+    {
+        getConnectedUsers,
+        getSearchResult,
+
+    }
+
     class ResponsePacket
     {
         public Dictionary<string, object> data { get; set; }
+        public PacketType responseType;
 
         public ResponsePacket() { }
 
-        public ResponsePacket(Dictionary<string, object> data)
+        public ResponsePacket(Dictionary<string, object> data, PacketType responseType)
         {
             this.data = data;
+            this.responseType = responseType;
         }
 
     }

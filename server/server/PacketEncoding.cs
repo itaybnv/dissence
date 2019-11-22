@@ -12,7 +12,8 @@ namespace server
     {
         // Map dictionary that maps packet types to their packet object
         private static readonly Dictionary<PacketType, Type> packetTypes = new Dictionary<PacketType, Type> {
-            { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) }
+            { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) },
+            { PacketType.getSearchResults, typeof(GetSearchResultPacket) }
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)
@@ -39,12 +40,24 @@ namespace server
             // Create an object of type packetType, and pass the tye 
             readyPacket = (Packet)Activator.CreateInstance(type, parameters);
 
+            Console.WriteLine(packetType);
             return readyPacket;
         }
 
         public static byte[] EncodeResponsePacket(ResponsePacket packet)
         {
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(packet.data));
+            // Type byte buffer
+            byte[] responseTypeBuffer = new byte[1] { (byte)packet.responseType };
+            // Data byte buffer
+            byte[] responseDataBuffer = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(packet.data));
+            // Buffer for Type and data both
+            byte[] responseBuffer = new byte[responseTypeBuffer.Length + responseDataBuffer.Length];
+            // Place the type byte in the first byte of the response buffer
+            Buffer.BlockCopy(responseTypeBuffer, 0, responseBuffer, 0, responseTypeBuffer.Length);
+            // Place te data bytes in the rest of the response buffer
+            Buffer.BlockCopy(responseDataBuffer, 0, responseBuffer, responseTypeBuffer.Length, responseDataBuffer.Length);
+
+            return responseBuffer;
         }
     }
 }
