@@ -7,15 +7,12 @@ const isDev = require("electron-is-dev");
 
 let mainWindow;
 
-const windowWidth = 920;
-const windowHeight = 830;
-
 function createWindow() {
 	mainWindow = new BrowserWindow({
-		width: 1280,
-		height: windowHeight,
-		minWidth: windowWidth,
-		minHeight: windowHeight,
+		width: 1300,
+		height: 830,
+		minWidth: 820,
+		minHeight: 600,
 		webPreferences: { nodeIntegration: true }
 	});
 	mainWindow.loadURL(
