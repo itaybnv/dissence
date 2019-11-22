@@ -63,7 +63,7 @@ namespace server
 
                     // Open a new thread for the user
                     new Thread(() => ClientHandler(user)).Start();
-                    
+
                 }
             }
 
@@ -86,7 +86,7 @@ namespace server
             byte[] packetLengthBuffer = new byte[4];
             // Type of the next packet
             byte packetTypeByte;
-        
+
 
             // Length of the next packet (int)
             int packetLen;
@@ -103,9 +103,19 @@ namespace server
 
             while (user.socket.Connected)
             {
-                // If the byte count of the length packet is not 5, ignore this packet
-                if (user.socket.Receive(packetHeaderBuffer) != 5)
+                try
+                {
+                    // If the byte count of the length packet is not 5, ignore this packet
+                    if (user.socket.Receive(packetHeaderBuffer) != 5)
+                        continue;
+                }
+                catch (SocketException e)
+                {
+                    user.socket.Close();
+                    Console.WriteLine(e.Message);
                     continue;
+                }
+
 
 
                 // If the system architecture is little-endian ( little end first in array )
@@ -118,7 +128,7 @@ namespace server
 
                 // Get packet type from the last byte of the array
                 packetType = packetHeaderBuffer[4];
-                
+
                 // Initiate packet byte array with correct size
                 packetBuffer = new byte[packetLen];
 
