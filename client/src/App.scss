@@ -1,0 +1,31 @@
+@import "@material/textfield/mixins";
+
+.dissence-app-container {
+	width: 100vw;
+	height: 100vh;
+
+	display: flex;
+	flex-flow: column nowrap;
+
+	overflow: hidden;
+}
+
+.dissence-main-container {
+	flex-grow: 1;
+
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+.dissence-footer-container {
+	height: 80px;
+}
+
+.dissence-video-search-field {
+	@include mdc-text-field-outline-color(white);
+	@include mdc-text-field-focused-outline-color(white);
+	@include mdc-text-field-hover-outline-color(white);
+	@include mdc-text-field-ink-color(white);
+	@include mdc-text-field-caret-color(white);
+	margin-left: 100px;
+}
