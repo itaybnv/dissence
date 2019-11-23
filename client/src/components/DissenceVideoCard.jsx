@@ -7,15 +7,6 @@ import { Ripple } from "@rmwc/ripple";
 import "./DissenceVideoCard.scss";
 
 export default class DissenceVideoCard extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			videoTitle: props.videoTitle ? props.videoTitle : "video title",
-			channelTitle: props.channelTitle ? props.channelTitle : "channel title",
-			videoThumbnailUrl: props.videoThumbnailUrl
-		};
-	}
-
 	onVideoClick = () => {};
 
 	formatVideoDuration = duration => {
@@ -35,7 +26,7 @@ export default class DissenceVideoCard extends Component {
 					<div className="dissence-video-card-thumbnail-container">
 						<img
 							className="dissence-Video-card-image"
-							src={this.state.videoThumbnailUrl}
+							src={this.props.videoThumbnailUrl}
 							alt="Thumbnail"
 						/>
 						<Typography className="dissence-video-card-duration" use="caption">
@@ -48,14 +39,14 @@ export default class DissenceVideoCard extends Component {
 							use="headline6"
 							tag="h3"
 						>
-							{this.state.videoTitle}
+							{this.props.videoTitle}
 						</Typography>
 						<Typography
 							className="dissence-video-card-channel"
 							use="caption"
 							theme="textSecondaryOnBackground"
 						>
-							{this.state.channelTitle}
+							{this.props.channelTitle}
 						</Typography>
 					</div>
 				</Elevation>
