@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,11 @@ namespace server
         {
             channel = new Channel();
             Execute();
+        }
+
+        private static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
+        {
+            return (file + " at line " + lineNumber);
         }
 
         public static void Execute()
@@ -69,7 +75,7 @@ namespace server
 
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(GetLineAndFile() + ": " + e.ToString());
             }
         }
 
@@ -84,9 +90,6 @@ namespace server
             byte[] packetHeaderBuffer = new byte[5];
             // Length of the next packet
             byte[] packetLengthBuffer = new byte[4];
-            // Type of the next packet
-            byte packetTypeByte;
-
 
             // Length of the next packet (int)
             int packetLen;
@@ -112,7 +115,7 @@ namespace server
                 catch (SocketException e)
                 {
                     user.socket.Close();
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(GetLineAndFile() + ": " + e.Message);
                     continue;
                 }
 
@@ -139,7 +142,16 @@ namespace server
 
                 responsePacket = packet.Execute(user);
 
-                user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
+                }
+                catch (SocketException e)
+                {
+                    user.socket.Close();
+                    Console.WriteLine(GetLineAndFile() + ": " + e.Message);
+                }
+
 
             }
 
