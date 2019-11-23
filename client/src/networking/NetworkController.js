@@ -17,7 +17,7 @@ class NetworkController {
 			data = data.slice(1);
 
 			if (packetType < 200) {
-				this.responseQueue.push({packetType, data});
+				this.responseQueue.push({ packetType, data });
 			} else {
 				//route event to correct handler/s
 				// try in case there are no eventhandlers registered
@@ -52,11 +52,11 @@ class NetworkController {
 		// Create one packet for the data and the header and concat them
 		const packetBuffer = Buffer.concat([headerBuffer, buffer]);
 
-		return new Promise(resolve =>
+		return new Promise((resolve, reject) =>
 			this.lock.acquire("socket", async () => {
-				this.socket.send(packetBuffer);
-
-				resolve(await this.responseQueue.shift());
+				await this.socket.send(packetBuffer).then(async () => {
+					resolve(await this.responseQueue.shift());
+				}).catch(error => reject(error));
 			})
 		);
 	};
@@ -67,6 +67,10 @@ class NetworkController {
 	registerEventHandler = (handler, type) => {
 		this.eventHandlers[type] = { ...this.eventHandlers[type], handler };
 	};
+
+	registerCloseHandler = handler => {
+		this.socket.registerCloseHandler(handler);
+	}
 }
 
 // Acts as a singleton

@@ -25,4 +25,6 @@ export default class SocketWrapper {
 		});
 
 	registerReceiveHandler = handler => this.socket.on("data", handler);
+
+	registerCloseHandler = handler => this.socket.on("close", handler); 
 }

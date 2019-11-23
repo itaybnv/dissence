@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import networkController from "./networking/NetworkController";
 
 import DissenceUsersList from "./components/DissenceUsersList";
 import DissencePlaylist from "./components/DissencePlaylist";
 import DissenceControlBar from "./components/DissenceControlBar";
 import DissenceSearchContent from "./components/DissenceSearchContent";
+import searchController from "./controllers/SearchController";
 
 import {
 	TopAppBar,
@@ -14,27 +16,60 @@ import {
 } from "@rmwc/top-app-bar";
 import { TextField } from "@rmwc/textfield";
 import { CircularProgress } from "@rmwc/circular-progress";
+import { DialogQueue } from "@rmwc/dialog";
 
 import "./App.scss";
-
-import searchController from "./controllers/SearchController";
 import "@rmwc/circular-progress/circular-progress.css";
+import { queue } from "./components/DissenceDialogQueue";
 
 class App extends Component {
-	state = { searchValue: "", results: [] };
+	state = { searchValue: "", results: []};
+
+	connectToServer = () =>
+		new Promise((resolve, reject) => {
+			networkController
+				.connect()
+				.then(() => {
+					resolve();
+				})
+				.catch(() => {
+					
+				})
+		});
 
 	onSearch = evt => {
 		evt.preventDefault();
-		this.setState({results: []})
+		this.setState({ results: [] });
 		searchController.ByTitle(this.state.searchValue).then(results => {
 			this.setState({ results: results.results });
 		});
 	};
 
 	componentDidMount() {
-		searchController.ByTitle("").then(results => {
-			this.setState({ results: results.results });
+		networkController.registerCloseHandler(() => {
+			queue
+				.confirm({
+					title: "test",
+					body: "The connection to the server has been dropped",
+					acceptLabel: "Retry",
+					cancelLabel: "Quit"
+				})
+				.then(res => {
+					if (res) {
+						this.connectToServer();
+					} else {
+						const electron = window.require("electron");
+						electron.remote.app.quit();
+					}
+				});
 		});
+
+		this.connectToServer()
+			.then(() => {
+				searchController.ByTitle("").then(results => {
+					this.setState({ results: results.results });
+				});
+			})
 	}
 
 	getSearchContent = () => {
@@ -56,6 +91,7 @@ class App extends Component {
 	render() {
 		return (
 			<div className="dissence-app-container">
+				<DialogQueue dialogs={queue.dialogs} preventOutsideDismiss />
 				<div className="dissence-header-container">
 					<TopAppBar fixed>
 						<TopAppBarRow>
