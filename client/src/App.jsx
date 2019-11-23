@@ -13,19 +13,44 @@ import {
 	TopAppBarTitle
 } from "@rmwc/top-app-bar";
 import { TextField } from "@rmwc/textfield";
+import { CircularProgress } from "@rmwc/circular-progress";
 
 import "./App.scss";
 
 import searchController from "./controllers/SearchController";
+import "@rmwc/circular-progress/circular-progress.css";
 
 class App extends Component {
 	state = { searchValue: "", results: [] };
 
 	onSearch = evt => {
 		evt.preventDefault();
+		this.setState({results: []})
 		searchController.ByTitle(this.state.searchValue).then(results => {
 			this.setState({ results: results.results });
 		});
+	};
+
+	componentDidMount() {
+		searchController.ByTitle("").then(results => {
+			this.setState({ results: results.results });
+		});
+	}
+
+	getSearchContent = () => {
+		if (this.state.results.length === 0) {
+			return (
+				<div className="dissence-search-content-loading-container">
+					<CircularProgress
+						className="dissence-search-content-loading"
+						size="xlarge"
+						theme="secondary"
+					/>
+				</div>
+			);
+		} else {
+			return <DissenceSearchContent searchResults={this.state.results} />;
+		}
 	};
 
 	render() {
@@ -54,7 +79,7 @@ class App extends Component {
 				</div>
 				<div className="dissence-main-container">
 					<DissencePlaylist />
-					<DissenceSearchContent searchResults={this.state.results} />
+					{this.getSearchContent()}
 					<DissenceUsersList />
 				</div>
 				<div className="dissence-footer-container">

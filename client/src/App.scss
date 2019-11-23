@@ -29,3 +29,14 @@
 	@include mdc-text-field-caret-color(white);
 	margin-left: 100px;
 }
+
+.dissence-search-content-loading-container {
+	flex-grow: 1;
+
+	display: flex;
+	justify-content: center;
+}
+
+.dissence-search-content-loading {
+	margin-top: 12px;
+}
