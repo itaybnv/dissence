@@ -23,18 +23,19 @@ import "@rmwc/circular-progress/circular-progress.css";
 import { queue } from "./components/DissenceDialogQueue";
 
 class App extends Component {
-	state = { searchValue: "", results: []};
+	state = { searchValue: "", results: [], connected: false };
 
 	connectToServer = () =>
 		new Promise((resolve, reject) => {
 			networkController
 				.connect()
 				.then(() => {
+					this.setState({ connected: true });
 					resolve();
 				})
 				.catch(() => {
-					
-				})
+					this.setState({ connected: false });
+				});
 		});
 
 	onSearch = evt => {
@@ -47,16 +48,21 @@ class App extends Component {
 
 	componentDidMount() {
 		networkController.registerCloseHandler(() => {
+			this.setState({ connected: false });
 			queue
 				.confirm({
-					title: "test",
-					body: "The connection to the server has been dropped",
+					title: "CONNECTION ERROR",
+					body: "Couldn't maintain a connection to the server.",
 					acceptLabel: "Retry",
 					cancelLabel: "Quit"
 				})
 				.then(res => {
 					if (res) {
-						this.connectToServer();
+						this.connectToServer().then(() => {
+							searchController.ByTitle("").then(results => {
+								this.setState({ results: results.results });
+							});
+						});
 					} else {
 						const electron = window.require("electron");
 						electron.remote.app.quit();
@@ -64,12 +70,11 @@ class App extends Component {
 				});
 		});
 
-		this.connectToServer()
-			.then(() => {
-				searchController.ByTitle("").then(results => {
-					this.setState({ results: results.results });
-				});
-			})
+		this.connectToServer().then(() => {
+			searchController.ByTitle("").then(results => {
+				this.setState({ results: results.results });
+			});
+		});
 	}
 
 	getSearchContent = () => {
@@ -90,7 +95,10 @@ class App extends Component {
 
 	render() {
 		return (
-			<div className="dissence-app-container">
+			<div
+				className="dissence-app-container"
+				style={{ pointerEvents: this.state.connected ? "" : "none" }}
+			>
 				<DialogQueue dialogs={queue.dialogs} preventOutsideDismiss />
 				<div className="dissence-header-container">
 					<TopAppBar fixed>
@@ -119,7 +127,7 @@ class App extends Component {
 					<DissenceUsersList />
 				</div>
 				<div className="dissence-footer-container">
-					<DissenceControlBar />
+					<DissenceControlBar connected={this.state.connected} />
 				</div>
 			</div>
 		);

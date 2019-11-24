@@ -40,3 +40,14 @@
 .dissence-search-content-loading {
 	margin-top: 12px;
 }
+
+.dissence-connected-container {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.dissence-online-circle {
+	height: 10px;
+	width: 10px;
+	border-radius: 50%;
+}

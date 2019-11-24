@@ -4,6 +4,7 @@ import { Fab } from "@rmwc/fab";
 import { Icon } from "@rmwc/icon";
 import { Slider } from "@rmwc/slider";
 import { LinearProgress } from "@rmwc/linear-progress";
+import { Typography } from "@rmwc/typography";
 
 import "./DissenceControlBar.scss";
 
@@ -41,7 +42,19 @@ export default class DissenceControlBar extends Component {
 	render() {
 		return (
 			<div className="dissence-controlbar-container">
-				<div className="ghost" style={{ width: "80px" }} />
+				<div className="dissence-online-container" style={{ height: "100%" }}>
+					<Typography
+						use="overline"
+						style={{
+							fontWeight: 900,
+							fontSize: 20,
+							color: "rgba(0, 0, 0, 0.30)",
+							margin: "0 0 8px 8px"
+						}}
+					>
+						{this.props.connected ? "online" : "offline"}
+					</Typography>
+				</div>
 				<div className="dissence-media-control-container">
 					<div className="dissence-media-buttons-container">
 						<Fab
@@ -56,16 +69,13 @@ export default class DissenceControlBar extends Component {
 					</div>
 				</div>
 				<div className="dissence-volume-control-container">
-					<Icon
-						style={{ color: "white", transition: "all 1s" }}
-						icon={this.state.volumeIcon}
-					></Icon>
+					<Icon style={{ color: "white" }} icon={this.state.volumeIcon}></Icon>
 					<Slider
 						className="dissence-volume-slider"
 						value={this.state.volumeValue}
 						onChange={evt => this.changeVolume(evt.detail.value)}
 						onInput={evt => this.changeVolume(evt.detail.value)}
-					></Slider>
+					/>
 				</div>
 			</div>
 		);
