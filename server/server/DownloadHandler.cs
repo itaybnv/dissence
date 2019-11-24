@@ -15,16 +15,20 @@ namespace server
             ytdl = new YoutubeDL();
         }
 
-        public void ByVideo(Video video)
+        public void ById(string id)
         {
             // Download audio only
             ytdl.Options.PostProcessingOptions.ExtractAudio = true;
-            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{video.Title}.mp3"; // TODO: fix the download location
-            ytdl.VideoUrl = $"https://www.youtube.com/watch?v={video.Id}";
+            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.mp3"; // TODO: fix the download location
+            ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
+            bool test = false;
             // Subscribe to console output
-            ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
-            ytdl.StandardErrorEvent += (sender, errorOutput) => Console.WriteLine(errorOutput);
+            ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine("OUTPUT: " + output);
+            ytdl.StandardErrorEvent += (sender, errorOutput) => 
+            {
+                throw new Exception(errorOutput);
+            };
 
             // Execute download
             ytdl.Download();

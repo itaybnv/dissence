@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace server.packets
 {
-    
-    enum ReceiveType
-    {
-        getConnectedUsers,
-        getSearchResult,
-
-    }
-
     class ResponsePacket
     {
         public Dictionary<string, object> data { get; set; }
