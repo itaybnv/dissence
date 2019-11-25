@@ -62,11 +62,13 @@ namespace server
                 var videoResult = videosListResponse.Items[i];
                 if (searchResult.Id.Kind == "youtube#video")
                 {
-                    resultList.Add(new Video(searchResult.Snippet.Title,
+                    Video vid = new Video(searchResult.Snippet.Title,
                                              searchResult.Snippet.ChannelTitle,
                                              searchResult.Id.VideoId,
                                              searchResult.Snippet.Thumbnails.Medium.Url,
-                                             videoResult.ContentDetails.Duration));
+                                             videoResult.ContentDetails.Duration);
+                    resultList.Add(vid);
+                    Server.channel.searchHistory[vid.Id] = vid;
                 }
             }
             return resultList;

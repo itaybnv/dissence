@@ -11,15 +11,18 @@ namespace server
     {
         public BindingList<string> videoQueue { get; }
         public List<User> userList { get;  }
+        public Dictionary<string, Video> searchHistory;
 
         public Channel()
         {
             videoQueue = new BindingList<string>();
             userList = new List<User>();
+            searchHistory = new Dictionary<string, Video>();
 
             videoQueue.AddingNew += (sender, e) =>
             {
-                // Broadcast file to all users
+                // Send new video details to all clients
+                // Send the actual video file to all clients
             };
         }
     }

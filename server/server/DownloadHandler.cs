@@ -19,7 +19,7 @@ namespace server
         {
             // Download audio only
             ytdl.Options.PostProcessingOptions.ExtractAudio = true;
-            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.mp3"; // TODO: fix the download location
+            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.mp3";
             ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
             bool test = false;
