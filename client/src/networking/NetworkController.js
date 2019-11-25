@@ -12,6 +12,7 @@ class NetworkController {
 
 	constructor() {
 		this.socket.registerReceiveHandler(data => {
+			console.log(data);
 			let packetType = data[0];
 			// disconnect packet type from packet data
 			data = data.slice(1);

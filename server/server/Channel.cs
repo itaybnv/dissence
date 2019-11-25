@@ -19,10 +19,16 @@ namespace server
             userList = new List<User>();
             searchHistory = new Dictionary<string, Video>();
 
-            videoQueue.AddingNew += (sender, e) =>
+            videoQueue.ListChanged += (sender, e) =>
             {
-                // Send new video details to all clients
-                // Send the actual video file to all clients
+                if (e.ListChangedType == ListChangedType.ItemAdded)
+                {
+                    // Send new video details to all clients
+                    Console.WriteLine("Item added to playlist");
+                    // create and broadcast response packet
+                    
+                    // Send the actual video file to all clients
+                }
             };
         }
     }

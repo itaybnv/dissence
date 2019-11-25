@@ -24,7 +24,7 @@ namespace server.packets
             {
                 return new ResponsePacket(new Dictionary<string, object>() { {"errorMessage", e.Message } }, PacketType.filePacket);
             }
-            Server.channel.videoQueue.Add(data["videoID"].ToString());
+            Server.channel.videoQueue.Add(data["videoId"].ToString());
             return new ResponsePacket();
             //return new ResponsePacket(new Dictionary<string, object>() { { "message", "successfull" } }, PacketType.filePacket);
         }

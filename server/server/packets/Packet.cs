@@ -12,7 +12,9 @@ namespace server
     {
         getConnectedUsers,
         getSearchResults,
-        filePacket
+        filePacket,
+
+        addToPlaylist = 200, 
     }
 
     abstract class Packet

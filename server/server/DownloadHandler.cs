@@ -22,7 +22,6 @@ namespace server
             ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.mp3";
             ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
-            bool test = false;
             // Subscribe to console output
             ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine("OUTPUT: " + output);
             ytdl.StandardErrorEvent += (sender, errorOutput) => 

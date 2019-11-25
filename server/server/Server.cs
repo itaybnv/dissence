@@ -20,6 +20,7 @@ namespace server
         {
             channel = new Channel();
             Execute();
+            //new DownloadByIdPacket(new Dictionary<string, object>() { { "videoId", "oGlLiEhDaIY" } }).Execute(new User(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)));
         }
 
         private static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
