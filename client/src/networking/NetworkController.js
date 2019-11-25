@@ -12,23 +12,20 @@ class NetworkController {
 
 	constructor() {
 		this.socket.registerReceiveHandler(data => {
-			console.log(data);
 			let packetType = data[0];
 			// disconnect packet type from packet data
 			data = data.slice(1);
-
 			if (packetType < 200) {
 				this.responseQueue.push({ packetType, data });
 			} else {
+				this.responseQueue.push({ packetType, data });
 				//route event to correct handler/s
 				// try in case there are no eventhandlers registered
 				// for the packet type
 				try {
-					for (var handler in this.eventHandlers[packetType]) {
-						handler(data);
-					}
+					this.eventHandlers[packetType](data);
 				} catch (error) {
-					console.log(error);
+					console.error(error);
 				}
 			}
 		});
@@ -55,9 +52,13 @@ class NetworkController {
 
 		return new Promise((resolve, reject) =>
 			this.lock.acquire("socket", async () => {
-				await this.socket.send(packetBuffer).then(async () => {
-					resolve(await this.responseQueue.shift());
-				}).catch(error => reject(error));
+				await this.socket
+					.send(packetBuffer)
+					.then(async () => {
+						resolve(await this.responseQueue.shift());
+						console.log("unlocked");
+					})
+					.catch(error => reject(error));
 			})
 		);
 	};
@@ -66,12 +67,12 @@ class NetworkController {
 	// event group (type => 200) and their callback will get called when the type
 	// they specified comes in to the eventQueue
 	registerEventHandler = (handler, type) => {
-		this.eventHandlers[type] = { ...this.eventHandlers[type], handler };
+		this.eventHandlers[type] = handler;
 	};
 
 	registerCloseHandler = handler => {
 		this.socket.registerCloseHandler(handler);
-	}
+	};
 }
 
 // Acts as a singleton

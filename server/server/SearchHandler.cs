@@ -11,6 +11,9 @@ using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 
+// key 1 : AIzaSyDSS76wLt0XodIC9SGx9gxH5EOhzUe5dII
+// key 2 : AIzaSyAHO8-R_5p0gw8skqwyPKtsGLLiTslqCJ4
+// key 3 : AIzaSyC8V4-4GmKmEoq34bqh3-YI8LR3fJYtqwA
 
 namespace server
 {
@@ -23,7 +26,7 @@ namespace server
             // Create a connection with youtube service
             youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyDSS76wLt0XodIC9SGx9gxH5EOhzUe5dII",
+                ApiKey = "AIzaSyC8V4-4GmKmEoq34bqh3-YI8LR3fJYtqwA",
                 ApplicationName = this.GetType().ToString()
             });
         }

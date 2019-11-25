@@ -12,10 +12,19 @@ export default class DissencePlaylist extends Component {
 		super(props);
 		this.state = { playlist: [] };
 		playlistController.registerEventHandler(data => {
+			data = JSON.parse(data.toString());
 			this.setState({
-				playlist: [...this.state.playlist, <DissencePlaylistItem />]
+				playlist: [
+					...this.state.playlist,
+					<DissencePlaylistItem
+						key={Math.random()}
+						videoTitle={data.title}
+						channelTitle={data.channelTitle}
+						videoThumbnailUrl={data.thumbnailUrl}
+					/>
+				]
 			});
-			console.log(data);
+			console.log(this.state.playlist);
 		});
 	}
 

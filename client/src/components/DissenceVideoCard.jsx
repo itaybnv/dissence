@@ -4,10 +4,24 @@ import { Elevation } from "@rmwc/elevation";
 import { Typography } from "@rmwc/typography";
 import { Ripple } from "@rmwc/ripple";
 
+import playlistController from "./../controllers/PlaylistController";
+
 import "./DissenceVideoCard.scss";
 
 export default class DissenceVideoCard extends Component {
-	onVideoClick = () => {};
+	onVideoClick = () => {
+		let video = {
+			id: this.props.id,
+			thumbnailUrl: this.props.videoThumbnailUrl,
+			title: this.props.videoTitle,
+			channelTitle: this.props.channelTitle
+		};
+		try {
+			playlistController.downloadToPlaylist(video);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	formatVideoDuration = duration => {
 		let array = duration.match(/(\d+)(?=[MHS])/gi) || [];

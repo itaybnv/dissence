@@ -23,7 +23,7 @@ namespace server
             //new DownloadByIdPacket(new Dictionary<string, object>() { { "videoId", "oGlLiEhDaIY" } }).Execute(new User(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)));
         }
 
-        private static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
+        public static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
         {
             return (file + " at line " + lineNumber);
         }
@@ -67,6 +67,7 @@ namespace server
 
                     // Create user and add to channel list
                     User user = new User(clientSocket);
+                    channel.userList.Add(user);
 
                     // Open a new thread for the user
                     new Thread(() => ClientHandler(user)).Start();
@@ -116,6 +117,7 @@ namespace server
                 catch (SocketException e)
                 {
                     user.socket.Close();
+                    channel.userList.Remove(user);
                     Console.WriteLine(GetLineAndFile() + ": " + e.Message);
                     continue;
                 }
@@ -150,6 +152,7 @@ namespace server
                 catch (SocketException e)
                 {
                     user.socket.Close();
+                    channel.userList.Remove(user);
                     Console.WriteLine(GetLineAndFile() + ": " + e.Message);
                 }
 

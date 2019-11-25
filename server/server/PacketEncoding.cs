@@ -13,7 +13,8 @@ namespace server
         // Map dictionary that maps packet types to their packet object
         private static readonly Dictionary<PacketType, Type> packetTypes = new Dictionary<PacketType, Type> {
             { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) },
-            { PacketType.getSearchResults, typeof(GetSearchResultPacket) }
+            { PacketType.getSearchResults, typeof(GetSearchResultPacket) },
+            { PacketType.downloadById, typeof(DownloadByIdPacket) }
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)
@@ -40,7 +41,7 @@ namespace server
             // Create an object of type packetType, and pass the tye 
             readyPacket = (Packet)Activator.CreateInstance(type, parameters);
 
-            Console.WriteLine(packetType);
+            Console.WriteLine("packet type: " + packetType);
             return readyPacket;
         }
 
@@ -56,7 +57,6 @@ namespace server
             Buffer.BlockCopy(responseTypeBuffer, 0, responseBuffer, 0, responseTypeBuffer.Length);
             // Place te data bytes in the rest of the response buffer
             Buffer.BlockCopy(responseDataBuffer, 0, responseBuffer, responseTypeBuffer.Length, responseDataBuffer.Length);
-
             return responseBuffer;
         }
     }
