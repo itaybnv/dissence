@@ -16,11 +16,9 @@ export default class DissenceVideoCard extends Component {
 			title: this.props.videoTitle,
 			channelTitle: this.props.channelTitle
 		};
-		try {
-			playlistController.downloadToPlaylist(video);
-		} catch (error) {
-			console.error(error);
-		}
+		playlistController.downloadToPlaylist(video).catch((e) => {
+			console.log(e);
+		});
 	};
 
 	formatVideoDuration = duration => {

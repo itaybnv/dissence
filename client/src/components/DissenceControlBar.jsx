@@ -47,9 +47,9 @@ export default class DissenceControlBar extends Component {
 						use="overline"
 						style={{
 							fontWeight: 900,
-							fontSize: 20,
+							fontSize: 16,
 							color: "rgba(0, 0, 0, 0.30)",
-							margin: "0 0 8px 8px"
+							margin: "0 0 0px 6px"
 						}}
 					>
 						{this.props.connected ? "online" : "offline"}

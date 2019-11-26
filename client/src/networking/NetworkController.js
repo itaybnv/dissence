@@ -18,7 +18,6 @@ class NetworkController {
 			if (packetType < 200) {
 				this.responseQueue.push({ packetType, data });
 			} else {
-				this.responseQueue.push({ packetType, data });
 				//route event to correct handler/s
 				// try in case there are no eventhandlers registered
 				// for the packet type
@@ -50,17 +49,27 @@ class NetworkController {
 		// Create one packet for the data and the header and concat them
 		const packetBuffer = Buffer.concat([headerBuffer, buffer]);
 
-		return new Promise((resolve, reject) =>
-			this.lock.acquire("socket", async () => {
-				await this.socket
-					.send(packetBuffer)
-					.then(async () => {
-						resolve(await this.responseQueue.shift());
-						console.log("unlocked");
-					})
-					.catch(error => reject(error));
-			})
-		);
+		if (packetType < 200) {
+			return new Promise((resolve, reject) =>
+				this.lock.acquire("socket", async () => {
+					await this.socket
+						.send(packetBuffer)
+						.then(async () => {
+							resolve(await this.responseQueue.shift());
+							console.log("unlocked");
+						})
+						.catch(error => reject(error));
+				})
+			);
+		} else {
+			return new Promise((resolve, reject) => {
+				this.lock.acquire("socket", async () => {
+					await this.socket.send(packetBuffer).catch(e => reject(e));
+					resolve();
+					console.log("unlocked");
+				});
+			});
+		}
 	};
 
 	// Controllers will register their callback func to each data type from the

@@ -23,9 +23,9 @@ namespace server.packets
             }
             catch (Exception e)
             {
-                return new ResponsePacket(new Dictionary<string, object>() { {"errorMessage", e.Message } }, PacketType.downloadById);
+                Console.WriteLine(e.Message);
             }
-            return new ResponsePacket(new Dictionary<string, object>() { {"test data", "this is a test data" } }, PacketType.downloadById);
+            return null;
         }
     }
 }

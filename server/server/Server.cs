@@ -144,16 +144,18 @@ namespace server
                 packet = PacketEncoding.DecodePacket(packetBuffer, packetType);
 
                 responsePacket = packet.Execute(user);
-
-                try
+                if (responsePacket != null)
                 {
-                    user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
-                }
-                catch (SocketException e)
-                {
-                    user.socket.Close();
-                    channel.userList.Remove(user);
-                    Console.WriteLine(GetLineAndFile() + ": " + e.Message);
+                    try
+                    {
+                        user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));
+                    }
+                    catch (SocketException e)
+                    {
+                        user.socket.Close();
+                        channel.userList.Remove(user);
+                        Console.WriteLine(GetLineAndFile() + ": " + e.Message);
+                    }
                 }
 
 

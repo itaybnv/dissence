@@ -14,7 +14,7 @@ namespace server
         private static readonly Dictionary<PacketType, Type> packetTypes = new Dictionary<PacketType, Type> {
             { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) },
             { PacketType.getSearchResults, typeof(GetSearchResultPacket) },
-            { PacketType.downloadById, typeof(DownloadByIdPacket) }
+            { PacketType.downloadById, typeof(DownloadByIdPacket) },
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)

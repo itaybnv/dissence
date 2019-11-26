@@ -26,14 +26,14 @@ namespace server
                     // Send new video details to all clients
                     foreach (User user in userList)
                     {
-                        Dictionary<string, object> data = new Dictionary<string, object>() { { "title", videoQueue[e.NewIndex].Title },
+                        Dictionary<string, object> data = new Dictionary<string, object>() { { "id", videoQueue[e.NewIndex].Id },
+                                                                                             { "title", videoQueue[e.NewIndex].Title },
                                                                                              { "thumbnailUrl", videoQueue[e.NewIndex].ThumbnailUrl },
                                                                                              { "channelTitle", videoQueue[e.NewIndex].ChannelTitle } };
 
                         try
                         {
                             user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
-
                         }
                         catch (Exception error)
                         {

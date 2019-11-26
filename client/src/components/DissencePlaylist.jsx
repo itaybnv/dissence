@@ -17,14 +17,13 @@ export default class DissencePlaylist extends Component {
 				playlist: [
 					...this.state.playlist,
 					<DissencePlaylistItem
-						key={Math.random()}
+						key={data.id}
 						videoTitle={data.title}
 						channelTitle={data.channelTitle}
 						videoThumbnailUrl={data.thumbnailUrl}
 					/>
 				]
 			});
-			console.log(this.state.playlist);
 		});
 	}
 

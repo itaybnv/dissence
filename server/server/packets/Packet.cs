@@ -13,9 +13,9 @@ namespace server
         getConnectedUsers,
         getSearchResults,
         filePacket,
-        downloadById,
 
-        addToPlaylist = 200
+        downloadById = 200,
+        addToPlaylist = 201
     }
 
     abstract class Packet

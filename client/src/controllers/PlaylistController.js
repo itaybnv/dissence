@@ -3,21 +3,13 @@ import PacketType from "../misc/PacketType";
 
 class PlaylistController {
 	registerEventHandler = handler => {
-		networkController.registerEventHandler(handler, PacketType.ADD_TO_PLAYLIST.toString());
+		networkController.registerEventHandler(handler, PacketType.ADD_TO_PLAYLIST);
 	};
 
-	downloadToPlaylist = video => {
+	downloadToPlaylist = video => new Promise((resolve, reject) => {
 		let dataBuffer = Buffer.from(JSON.stringify(video));
-		networkController
-			.send(dataBuffer, PacketType.DOWNLOAD_TO_PLAYLIST)
-			.then(res => {
-				console.log("reached after downloadtoplaylist")
-                let data = JSON.parse(res.data.toString());
-				if (data) {
-					throw data.errorMessage;
-				}
-			});
-	};
+		networkController.send(dataBuffer, PacketType.DOWNLOAD_BY_ID).catch(reject);
+	})
 }
 
 const playlistController = new PlaylistController();
