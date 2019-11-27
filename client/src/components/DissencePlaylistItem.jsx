@@ -39,17 +39,31 @@ export default class DissencePlaylistItem extends Component {
 					<Ticker move={this.state.textScroll} mode="smooth">
 						{({ index }) =>
 							index % 2 === 0 ? (
-								<span>
+								<div
+									style={{
+										overflow: "hidden",
+										textOverflow: "ellipsis",
+										whiteSpace: "nowrap",
+										paddingRight: "50px"
+									}}
+								>
 									{this.props.videoTitle
 										? this.props.videoTitle
 										: "Exmaple Video Title"}
-								</span>
+								</div>
 							) : (
-								<span>
+								<div
+									style={{
+										overflow: "hidden",
+										textOverflow: "ellipsis",
+										whiteSpace: "nowrap",
+										paddingRight: "50px"
+									}}
+								>
 									{this.props.channelTitle
 										? this.props.channelTitle
 										: "Example Channel title"}
-								</span>
+								</div>
 							)
 						}
 					</Ticker>
