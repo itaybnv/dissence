@@ -17,8 +17,8 @@ namespace server
         public override ResponsePacket Execute(User user)
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("users", Server.channel.userList);
-
+            // select just the nicknames from the userlist
+            data.Add("nicknames", Server.channel.userList.Select(u => u.nickname).ToArray());
             ResponsePacket responsePacket = new ResponsePacket(data, PacketType.getConnectedUsers);
 
             return responsePacket;

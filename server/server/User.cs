@@ -15,6 +15,7 @@ namespace server
         public User(Socket socket)
         {
             this.socket = socket;
+            this.nickname = "test nickname";
         }
 
 
