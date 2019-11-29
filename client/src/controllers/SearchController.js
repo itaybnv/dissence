@@ -13,7 +13,6 @@ class SearchController {
 					const entities = new Entities();
 
 					let data = JSON.parse(res.data.toString());
-					console.log(data);
 					for (let i = 0; i < data.results.length - 1; i++) {
 						data.results[i].Title = entities.decode(data.results[i].Title);
 					}

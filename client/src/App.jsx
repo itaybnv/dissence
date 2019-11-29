@@ -23,7 +23,7 @@ import "@rmwc/circular-progress/circular-progress.css";
 import { queue } from "./components/DissenceDialogQueue";
 
 class App extends Component {
-	state = { searchValue: "", results: [], connected: false };
+	state = { searchValue: "", results: [], connected: null };
 
 	connectToServer = () =>
 		new Promise((resolve, reject) => {
@@ -33,8 +33,9 @@ class App extends Component {
 					this.setState({ connected: true });
 					resolve();
 				})
-				.catch(() => {
+				.catch(error => {
 					this.setState({ connected: false });
+					reject(error);
 				});
 		});
 
@@ -58,12 +59,16 @@ class App extends Component {
 				})
 				.then(res => {
 					if (res) {
-						this.connectToServer().then(() => {
-							searchController.ByTitle("").then(results => {
-								this.setState({ results: results.results });
-							});
-						});
+						// user pressed retry
+						this.connectToServer()
+							.then(() => {
+								searchController.ByTitle("").then(results => {
+									this.setState({ results: results.results });
+								});
+							})
+							.catch();
 					} else {
+						// user pressed quit
 						const electron = window.require("electron");
 						electron.remote.app.quit();
 					}
@@ -71,9 +76,12 @@ class App extends Component {
 		});
 
 		this.connectToServer().then(() => {
-			searchController.ByTitle("").then(results => {
-				this.setState({ results: results.results });
-			});
+			searchController
+				.ByTitle("")
+				.then(results => {
+					this.setState({ results: results.results });
+				})
+				.catch();
 		});
 	}
 
@@ -94,43 +102,49 @@ class App extends Component {
 	};
 
 	render() {
-		return (
-			<div
-				className="dissence-app-container"
-				style={{ pointerEvents: this.state.connected ? "" : "none" }}
-			>
-				<DialogQueue dialogs={queue.dialogs} preventOutsideDismiss />
-				<div className="dissence-header-container">
-					<TopAppBar fixed>
-						<TopAppBarRow>
-							<TopAppBarSection alignStart>
-								<TopAppBarTitle>Dissence</TopAppBarTitle>
-								<form onSubmit={this.onSearch}>
-									<TextField
-										className="dissence-video-search-field"
-										outlined
-										placeholder="Search video.."
-										value={this.state.searchValue}
-										onChange={evt =>
-											this.setState({ searchValue: evt.target.value })
-										}
-									/>
-								</form>
-							</TopAppBarSection>
-						</TopAppBarRow>
-					</TopAppBar>
-					<TopAppBarFixedAdjust />
+		if (this.state.connected === null) {
+			// not yet connected or not connected
+			return <div></div>;
+		} else {
+			// either connected or not, if not the dialog box will appear
+			return (
+				<div
+					className="dissence-app-container"
+					style={{ pointerEvents: this.state.connected ? "" : "none" }}
+				>
+					<DialogQueue dialogs={queue.dialogs} preventOutsideDismiss />
+					<div className="dissence-header-container">
+						<TopAppBar fixed>
+							<TopAppBarRow>
+								<TopAppBarSection alignStart>
+									<TopAppBarTitle>Dissence</TopAppBarTitle>
+									<form onSubmit={this.onSearch}>
+										<TextField
+											className="dissence-video-search-field"
+											outlined
+											placeholder="Search video.."
+											value={this.state.searchValue}
+											onChange={evt =>
+												this.setState({ searchValue: evt.target.value })
+											}
+										/>
+									</form>
+								</TopAppBarSection>
+							</TopAppBarRow>
+						</TopAppBar>
+						<TopAppBarFixedAdjust />
+					</div>
+					<div className="dissence-main-container">
+						<DissencePlaylist />
+						{this.getSearchContent()}
+						<DissenceUsersList />
+					</div>
+					<div className="dissence-footer-container">
+						<DissenceControlBar connected={this.state.connected} />
+					</div>
 				</div>
-				<div className="dissence-main-container">
-					<DissencePlaylist />
-					{this.getSearchContent()}
-					<DissenceUsersList />
-				</div>
-				<div className="dissence-footer-container">
-					<DissenceControlBar connected={this.state.connected} />
-				</div>
-			</div>
-		);
+			);
+		}
 	}
 }
 
