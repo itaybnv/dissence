@@ -9,13 +9,13 @@ namespace server
 {
     class User
     {
-        public string nickname { get; set; }
+        public string Nickname { get; set; }
         public Socket socket { get; }
 
         public User(Socket socket)
         {
             this.socket = socket;
-            this.nickname = "test nickname";
+            this.Nickname = "User#" + Guid.NewGuid().ToString().Substring(0, 8);
         }
 
 

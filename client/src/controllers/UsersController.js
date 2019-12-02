@@ -14,6 +14,17 @@ class UserController {
 					console.error(error);
 				});
 		});
+
+	updateNickname = nick => {
+		new Promise(() => {
+			let data = Buffer.from('{ "nickname": "' + nick + '" }');
+			networkController.send(data, PacketType.UPDATE_NICKNAME);
+		});
+	};
+
+	registerEventHandler = handler => {
+		networkController.registerEventHandler(handler, PacketType.UPDATE_NICKNAME);
+	};
 }
 
 const userController = new UserController();

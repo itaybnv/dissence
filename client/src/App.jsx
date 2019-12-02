@@ -60,14 +60,13 @@ class App extends Component {
 	};
 
 	initialActions = () => {
-		// ask for nickname
+		// Ask for nickname
 		nicknameDialog().then(res => {
+			// If not skipped, update nickname in server
 			if (res) {
-				// TODO need to send update to server instead of this
-				this.setState({ nickname: res });
+				userController.updateNickname(res);
 			}
 		});
-		// send nickname
 		// fetch playlist
 		// fetch search content
 		searchController.ByTitle("").then(results => {
@@ -117,7 +116,12 @@ class App extends Component {
 				</div>
 			);
 		} else {
-			return <DissenceSearchContent searchResults={this.state.results} searchQuery={this.state.searchContentValue} />;
+			return (
+				<DissenceSearchContent
+					searchResults={this.state.results}
+					searchQuery={this.state.searchContentValue}
+				/>
+			);
 		}
 	};
 

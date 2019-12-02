@@ -47,5 +47,25 @@ namespace server
                 }
             };
         }
+
+        public void UpdateNickname(string oldNick, string newNick)
+        {
+            foreach (User user in userList)
+            {
+                Dictionary<string, object> data = new Dictionary<string, object>() { { "oldNickname", oldNick },
+                                                                                     { "newNickname", newNick }
+                };
+
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.updateNickname)));
+                }
+                catch (Exception error)
+                {
+                    Server.channel.userList.Remove(user);
+                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
+                }
+            }
+        }
     }
 }

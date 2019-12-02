@@ -15,7 +15,8 @@ namespace server
         filePacket,
 
         downloadById = 200,
-        addToPlaylist = 201
+        addToPlaylist = 201,
+        updateNickname = 202
     }
 
     abstract class Packet

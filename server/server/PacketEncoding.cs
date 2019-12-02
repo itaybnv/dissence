@@ -15,6 +15,7 @@ namespace server
             { PacketType.getConnectedUsers, typeof(GetConnectedUsersPacket) },
             { PacketType.getSearchResults, typeof(GetSearchResultPacket) },
             { PacketType.downloadById, typeof(DownloadByIdPacket) },
+            { PacketType.updateNickname, typeof(UpdateNicknamePacket) },
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)
@@ -28,7 +29,7 @@ namespace server
             // Convert byte array to string
             // The packet is sent as a string of a Json object
             packetDataJson = Encoding.UTF8.GetString(packet, 0, packet.Length);
-
+            Console.WriteLine(packetDataJson);
             // Convert from Json string to dict for ease of use
             dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(packetDataJson);
 

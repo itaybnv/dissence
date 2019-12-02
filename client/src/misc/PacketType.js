@@ -3,7 +3,8 @@ const PacketType = {
 	GET_SEARCH_RESULT: 1,
 	FILE_PACKET: 2,
 	DOWNLOAD_BY_ID: 200,
-	ADD_TO_PLAYLIST: 201
+	ADD_TO_PLAYLIST: 201,
+	UPDATE_NICKNAME: 202
 };
 
 export default PacketType;
