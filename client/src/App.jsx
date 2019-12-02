@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import networkController from "./networking/NetworkController";
+import searchController from "./controllers/SearchController";
+import userController from "./controllers/UsersController";
 
 import DissenceUsersList from "./components/DissenceUsersList";
 import DissencePlaylist from "./components/DissencePlaylist";
 import DissenceControlBar from "./components/DissenceControlBar";
 import DissenceSearchContent from "./components/DissenceSearchContent";
-import searchController from "./controllers/SearchController";
 
 import {
 	TopAppBar,
@@ -20,10 +21,21 @@ import { DialogQueue } from "@rmwc/dialog";
 
 import "./App.scss";
 import "@rmwc/circular-progress/circular-progress.css";
-import { queue } from "./components/DissenceDialogQueue";
+import {
+	queue,
+	nicknameDialog,
+	connectionErrorDialog
+} from "./components/DissenceDialogQueue";
 
 class App extends Component {
-	state = { searchValue: "", results: [], connected: null };
+	state = {
+		searchValue: "",
+		searchContentValue: "",
+		results: [],
+		connected: null,
+		nickname: "",
+		nicknames: []
+	};
 
 	connectToServer = () =>
 		new Promise((resolve, reject) => {
@@ -41,48 +53,56 @@ class App extends Component {
 
 	onSearch = evt => {
 		evt.preventDefault();
-		this.setState({ results: [] });
+		this.setState({ results: [], searchContentValue: this.state.searchValue });
 		searchController.ByTitle(this.state.searchValue).then(results => {
 			this.setState({ results: results.results });
 		});
 	};
 
+	initialActions = () => {
+		// ask for nickname
+		nicknameDialog().then(res => {
+			if (res) {
+				// TODO need to send update to server instead of this
+				this.setState({ nickname: res });
+			}
+		});
+		// send nickname
+		// fetch playlist
+		// fetch search content
+		searchController.ByTitle("").then(results => {
+			this.setState({ results: results.results });
+		});
+		// fetch connected users
+		userController
+			.getConnectedUsers()
+			.then(res => {
+				console.log(res);
+				this.setState({ nicknames: res.nicknames });
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	};
+
 	componentDidMount() {
 		networkController.registerCloseHandler(() => {
 			this.setState({ connected: false });
-			queue
-				.confirm({
-					title: "CONNECTION ERROR",
-					body: "Couldn't maintain a connection to the server.",
-					acceptLabel: "Retry",
-					cancelLabel: "Quit"
-				})
-				.then(res => {
-					if (res) {
-						// user pressed retry
-						this.connectToServer()
-							.then(() => {
-								searchController.ByTitle("").then(results => {
-									this.setState({ results: results.results });
-								});
-							})
-							.catch();
-					} else {
-						// user pressed quit
-						const electron = window.require("electron");
-						electron.remote.app.quit();
-					}
-				});
+			connectionErrorDialog().then(res => {
+				if (res) {
+					// user pressed retry
+					this.connectToServer()
+						.then(this.initialActions)
+						.catch();
+				} else {
+					// user pressed quit
+					const electron = window.require("electron");
+					electron.remote.app.quit();
+				}
+			});
 		});
 
-		this.connectToServer().then(() => {
-			searchController
-				.ByTitle("")
-				.then(results => {
-					this.setState({ results: results.results });
-				})
-				.catch();
-		});
+		this.connectToServer().then(this.initialActions);
 	}
 
 	getSearchContent = () => {
@@ -97,7 +117,7 @@ class App extends Component {
 				</div>
 			);
 		} else {
-			return <DissenceSearchContent searchResults={this.state.results} />;
+			return <DissenceSearchContent searchResults={this.state.results} searchQuery={this.state.searchContentValue} />;
 		}
 	};
 
@@ -137,7 +157,7 @@ class App extends Component {
 					<div className="dissence-main-container">
 						<DissencePlaylist />
 						{this.getSearchContent()}
-						<DissenceUsersList />
+						<DissenceUsersList nicknames={this.state.nicknames} />
 					</div>
 					<div className="dissence-footer-container">
 						<DissenceControlBar connected={this.state.connected} />
