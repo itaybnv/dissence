@@ -48,13 +48,11 @@ namespace server
             };
         }
 
-        public void UpdateNickname(string oldNick, string newNick)
+        public void UpdateNickname()
         {
             foreach (User user in userList)
             {
-                Dictionary<string, object> data = new Dictionary<string, object>() { { "oldNickname", oldNick },
-                                                                                     { "newNickname", newNick }
-                };
+                Dictionary<string, object> data = new Dictionary<string, object>() { {"nicknames", userList.Select(u => u.Nickname).ToList() } };
 
                 try
                 {
