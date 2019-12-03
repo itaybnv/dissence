@@ -10,13 +10,13 @@ namespace server
     class Channel
     {
         public BindingList<Video> videoQueue { get; }
-        public List<User> userList { get;  }
+        public BindingList<User> userList { get;  }
         public Dictionary<string, Video> searchHistory;
 
         public Channel()
         {
             videoQueue = new BindingList<Video>();
-            userList = new List<User>();
+            userList = new BindingList<User>();
             searchHistory = new Dictionary<string, Video>();
 
             videoQueue.ListChanged += (sender, e) =>
@@ -46,9 +46,17 @@ namespace server
                     // Send the actual video file to all clients
                 }
             };
+
+            userList.ListChanged += (sender, e) =>
+            {
+                if (e.ListChangedType == ListChangedType.ItemDeleted)
+                {
+                    UpdateNicknames();
+                }
+            };
         }
 
-        public void UpdateNickname()
+        public void UpdateNicknames()
         {
             foreach (User user in userList)
             {

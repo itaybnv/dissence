@@ -59,6 +59,13 @@ class App extends Component {
 		});
 	};
 
+	registerNicknameHandler = () => {
+		userController.registerEventHandler(data => {
+			data = JSON.parse(data.toString());
+			this.setState({ nicknames: data.nicknames });
+		});
+	};
+
 	initialActions = () => {
 		// Ask for nickname
 		nicknameDialog().then(res => {
@@ -82,6 +89,8 @@ class App extends Component {
 			.catch(error => {
 				console.error(error);
 			});
+		
+		this.registerNicknameHandler();
 	};
 
 	componentDidMount() {
