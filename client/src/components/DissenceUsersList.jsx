@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
 import { List, ListItem } from "@rmwc/list";
-import userController from "../controllers/UsersController";
 
 export default class DissenceUsersList extends Component {
 	render() {
@@ -19,7 +18,8 @@ export default class DissenceUsersList extends Component {
 							<ListItem
 								style={{
 									alignItems: "center",
-									justifyContent: "center"
+									justifyContent: "center",
+									fontWeight: nick === this.props.nickname ? "bold" : "normal"
 								}}
 								key={nick}
 							>

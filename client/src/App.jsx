@@ -71,6 +71,7 @@ class App extends Component {
 		nicknameDialog().then(res => {
 			// If not skipped, update nickname in server
 			if (res) {
+				this.setState({ nickname: res });
 				userController.updateNickname(res);
 			}
 		});
@@ -89,7 +90,7 @@ class App extends Component {
 			.catch(error => {
 				console.error(error);
 			});
-		
+
 		this.registerNicknameHandler();
 	};
 
@@ -170,7 +171,10 @@ class App extends Component {
 					<div className="dissence-main-container">
 						<DissencePlaylist />
 						{this.getSearchContent()}
-						<DissenceUsersList nicknames={this.state.nicknames} />
+						<DissenceUsersList
+							nicknames={this.state.nicknames}
+							nickname={this.state.nickname}
+						/>
 					</div>
 					<div className="dissence-footer-container">
 						<DissenceControlBar connected={this.state.connected} />
