@@ -2,30 +2,25 @@ import React, { Component } from "react";
 
 import { List } from "@rmwc/list";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@rmwc/drawer";
-import DissencePlaylistItem from "./DissencePlaylistItem";
 import { Scrollbars } from "react-custom-scrollbars";
 
-import playlistController from "./../controllers/PlaylistController";
+import DissencePlaylistItem from "./DissencePlaylistItem";
 
 export default class DissencePlaylist extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { playlist: [] };
-		playlistController.registerEventHandler(data => {
-			data = JSON.parse(data.toString());
-			this.setState({
-				playlist: [
-					...this.state.playlist,
+	getPlaylist = () => {
+		if (this.props.playlist) {
+			return this.props.playlist.map(item => {
+				return (
 					<DissencePlaylistItem
-						key={data.id}
-						videoTitle={data.title}
-						channelTitle={data.channelTitle}
-						videoThumbnailUrl={data.thumbnailUrl}
+						key={item.Id}
+						videoTitle={item.Title}
+						channelTitle={item.ChannelTitle}
+						videoThumbnailUrl={item.ThumbnailUrl}
 					/>
-				]
+				);
 			});
-		});
-	}
+		}
+	};
 
 	render() {
 		return (
@@ -36,7 +31,7 @@ export default class DissencePlaylist extends Component {
 					</DrawerHeader>
 					<DrawerContent>
 						<Scrollbars>
-							<List>{this.state.playlist}</List>
+							<List>{this.getPlaylist()}</List>
 						</Scrollbars>
 					</DrawerContent>
 				</Drawer>

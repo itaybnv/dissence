@@ -10,7 +10,7 @@ namespace server
     class Channel
     {
         public BindingList<Video> videoQueue { get; }
-        public BindingList<User> userList { get;  }
+        public BindingList<User> userList { get; }
         public Dictionary<string, Video> searchHistory;
 
         public Channel()
@@ -23,27 +23,7 @@ namespace server
             {
                 if (e.ListChangedType == ListChangedType.ItemAdded)
                 {
-                    // Send new video details to all clients
-                    foreach (User user in userList)
-                    {
-                        Dictionary<string, object> data = new Dictionary<string, object>() { { "id", videoQueue[e.NewIndex].Id },
-                                                                                             { "title", videoQueue[e.NewIndex].Title },
-                                                                                             { "thumbnailUrl", videoQueue[e.NewIndex].ThumbnailUrl },
-                                                                                             { "channelTitle", videoQueue[e.NewIndex].ChannelTitle } };
-
-                        try
-                        {
-                            user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
-                        }
-                        catch (Exception error)
-                        {
-                            Server.channel.userList.Remove(user);
-                            Console.WriteLine(Server.GetLineAndFile() + error.Message);
-                        }
-                    }
-
-                    
-                    // Send the actual video file to all clients
+                    UpdatePlaylist(sender, e);
                 }
             };
 
@@ -51,12 +31,38 @@ namespace server
             {
                 if (e.ListChangedType == ListChangedType.ItemDeleted)
                 {
-                    UpdateNicknames();
+                    UpdateNicknames(sender, e);
                 }
             };
         }
 
-        public void UpdateNicknames()
+        private void UpdatePlaylist(object sender, ListChangedEventArgs e)
+        {
+            // Send new video details to all clients
+            foreach (User user in userList)
+            {
+                //Dictionary<string, object> data = new Dictionary<string, object>() { { "id", videoQueue[e.NewIndex].Id },
+                //                                                                             { "title", videoQueue[e.NewIndex].Title },
+                //                                                                             { "thumbnailUrl", videoQueue[e.NewIndex].ThumbnailUrl },
+                //                                                                             { "channelTitle", videoQueue[e.NewIndex].ChannelTitle } };
+
+                Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
+
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
+                }
+                catch (Exception error)
+                {
+                    Server.channel.userList.Remove(user);
+                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
+                }
+            }
+
+            // Send the actual video file to all clients
+        }
+
+        public void UpdateNicknames(object sender, ListChangedEventArgs e)
         {
             foreach (User user in userList)
             {

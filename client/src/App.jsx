@@ -26,6 +26,7 @@ import {
 	nicknameDialog,
 	connectionErrorDialog
 } from "./components/DissenceDialogQueue";
+import playlistController from "./controllers/PlaylistController";
 
 class App extends Component {
 	state = {
@@ -34,7 +35,8 @@ class App extends Component {
 		results: [],
 		connected: null,
 		nickname: "",
-		nicknames: []
+		nicknames: [],
+		playlist: []
 	};
 
 	connectToServer = () =>
@@ -66,6 +68,14 @@ class App extends Component {
 		});
 	};
 
+	registerPlaylistHandler = () => {
+		playlistController.registerEventHandler(data => {
+			data = JSON.parse(data.toString());
+			console.log("yeet data", data);
+			this.setState({ playlist: [...data.playlist] });
+		});
+	};
+
 	initialActions = () => {
 		// Ask for nickname
 		nicknameDialog().then(res => {
@@ -75,16 +85,21 @@ class App extends Component {
 				userController.updateNickname(res);
 			}
 		});
+
 		// fetch playlist
+		playlistController.getPlaylist().then(res => {
+			console.log("res playlist", res);
+			this.setState({ playlist: res.playlist });
+		});
 		// fetch search content
 		searchController.ByTitle("").then(results => {
 			this.setState({ results: results.results });
 		});
+
 		// fetch connected users
 		userController
 			.getConnectedUsers()
 			.then(res => {
-				console.log(res);
 				this.setState({ nicknames: res.nicknames });
 			})
 			.catch(error => {
@@ -92,6 +107,7 @@ class App extends Component {
 			});
 
 		this.registerNicknameHandler();
+		this.registerPlaylistHandler();
 	};
 
 	componentDidMount() {
@@ -169,7 +185,7 @@ class App extends Component {
 						<TopAppBarFixedAdjust />
 					</div>
 					<div className="dissence-main-container">
-						<DissencePlaylist />
+						<DissencePlaylist playlist={this.state.playlist} />
 						{this.getSearchContent()}
 						<DissenceUsersList
 							nicknames={this.state.nicknames}
