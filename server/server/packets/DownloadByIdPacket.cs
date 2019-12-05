@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace server.packets
@@ -19,7 +20,7 @@ namespace server.packets
             Server.channel.videoQueue.Add(new Video(data["title"].ToString(), data["channelTitle"].ToString(), data["id"].ToString(), data["thumbnailUrl"].ToString(), null));
             try
             {
-                downloadHandler.ById(data["id"].ToString());
+                new Thread(() => downloadHandler.ById(data["id"].ToString())).Start();
             }
             catch (Exception e)
             {
