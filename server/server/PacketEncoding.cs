@@ -16,6 +16,7 @@ namespace server
             { PacketType.getSearchResults, typeof(GetSearchResultPacket) },
             { PacketType.downloadById, typeof(DownloadByIdPacket) },
             { PacketType.updateNickname, typeof(UpdateNicknamePacket) },
+            { PacketType.getPlaylist, typeof(GetPlaylistPacket) },
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)

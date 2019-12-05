@@ -13,6 +13,7 @@ namespace server
         getConnectedUsers,
         getSearchResults,
         filePacket,
+        getPlaylist,
 
         downloadById = 200,
         addToPlaylist = 201,
