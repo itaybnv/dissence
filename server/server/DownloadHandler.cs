@@ -19,7 +19,8 @@ namespace server
         {
             // Download audio only
             ytdl.Options.PostProcessingOptions.ExtractAudio = true;
-            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.mp3";
+            ytdl.Options.FilesystemOptions.Output = $"../../audio_files/{id}.opus";
+            ytdl.Options.PostProcessingOptions.AudioFormat = NYoutubeDL.Helpers.Enums.AudioFormat.opus;
             ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
             // Subscribe to console output
