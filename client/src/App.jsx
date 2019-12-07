@@ -27,6 +27,7 @@ import {
 	connectionErrorDialog
 } from "./components/DissenceDialogQueue";
 import playlistController from "./controllers/PlaylistController";
+import audioManager from "./audio/AudioManager";
 
 class App extends Component {
 	state = {
@@ -43,6 +44,7 @@ class App extends Component {
 		new Promise((resolve, reject) => {
 			networkController
 				.connect()
+				.then(() => audioManager.connect())
 				.then(() => {
 					this.setState({ connected: true });
 					resolve();

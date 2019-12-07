@@ -15,12 +15,13 @@ namespace server
     class Server
     {
         public static Channel channel;
+        public static AudioServer AudioServer { get; set; }
 
         static void Main(string[] args)
         {
             channel = new Channel();
+            AudioServer = new AudioServer();
             Execute();
-            //new DownloadByIdPacket(new Dictionary<string, object>() { { "videoId", "oGlLiEhDaIY" } }).Execute(new User(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)));
         }
 
         public static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
@@ -30,19 +31,18 @@ namespace server
 
         public static void Execute()
         {
-            // Establish the local endpoint for the socket. Dns.GetHostName 
-            // returns the name of the host running the application 
+            // Establish the local endpoint for the socket. Dns.GetHostName
+            // returns the name of the host running the application
             IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
             //IPAddress ipAddr = ipHost.AddressList[0];
             IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
             const int port = 27015;
-            Console.WriteLine(ipAddr.MapToIPv4());
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
-            // Creation TCP/IP Socket using  
-            // Socket Class Costructor 
+            // Creation TCP/IP Socket using
             Socket listener = new Socket(ipAddr.AddressFamily,
                          SocketType.Stream, ProtocolType.Tcp);
+            listener.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
 
             try
             {
