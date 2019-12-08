@@ -24,7 +24,6 @@ namespace server
         public void BroadcastByFileName(string filename)
         {
             List<byte[]> samples = AudioExtractor.Extract(filename);
-            Console.WriteLine(6);
             BroadcastSamples(samples);
         }
 
@@ -32,12 +31,10 @@ namespace server
         {
             while (true)
             {
-                Console.WriteLine(1);
                 // log connections for future reference
                 EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
                 socket.ReceiveFrom(new byte[1], ref senderRemote);
                 endpoints.Add(senderRemote);
-                Console.WriteLine(2);
             }
         }
 
@@ -45,8 +42,7 @@ namespace server
         {
             foreach (EndPoint endpoint in endpoints)
             {
-                Console.WriteLine(5);
-                socket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                socket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, (_) => { Console.WriteLine(sample.Length); }, null);
             }
         }
 
@@ -55,6 +51,7 @@ namespace server
             foreach (byte[] sample in samples)
             {
                 SendSampleToEndpoints(sample);
+                Thread.Sleep(40);
             }
         }
     }

@@ -25,9 +25,9 @@ namespace server
                     short[] pcm = oggIn.DecodeNextPacket();
                     if (pcm != null)
                     {
-                        byte[] outputBytes = new byte[2048];
-                        encoder.Encode(pcm, 0, 960, outputBytes, 0, outputBytes.Length);
-
+                        byte[] outputBytes = new byte[1920 * 4];
+                        int outputBytesLength = encoder.Encode(pcm, 0, 1920, outputBytes, 0, outputBytes.Length);
+                        outputBytes = outputBytes.Take(outputBytesLength).ToArray();
                         samples.Add(outputBytes);
                     }
                 }
