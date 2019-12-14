@@ -1,6 +1,5 @@
-const Speaker = window.require("speaker");
+const { OpusDecoder, RtAudio } = window.require("audify");
 const dgram = window.require("dgram");
-const opus = window.require("node-opus");
 
 const sampleRate = 48000;
 const frameDuration = 40;
@@ -10,37 +9,38 @@ const frameSize = (sampleRate * frameDuration) / 1000;
 
 class AudioManager {
 	constructor() {
-		this.client = dgram.createSocket("udp4");
-		this.encoder = new opus.OpusEncoder(sampleRate);
-		this.speaker = new Speaker({
-			channels,
-			bitDepth,
+		this.decoder = new OpusDecoder(sampleRate, channels);
+		this.audio = new RtAudio();
+		this.audio.openStream(
+			{ nChannels: channels, deviceId: 4 },
+			null,
+			0x2,
 			sampleRate,
-			samplesPerFrame: frameSize
-		});
-
+			frameSize,
+			"DissenceStream",
+			null
+		);
+		this.client = dgram.createSocket("udp4");
 		this.client.on("message", this.handleAudioPacket);
+		this.audio.start();
 	}
 
 	handleAudioPacket = buf => {
 		try {
-			let pcm = this.encoder.decode(buf, frameSize);
-			console.log(buf.length);
-			this.speaker.write(pcm);
-		} catch (error) {}
+			this.audio.write(this.decoder.decode(buf, frameSize));
+		} catch (error) {
+		}
 	};
 
 	connect = () =>
 		new Promise((resolve, reject) => {
-			this.client.connect(27015, "127.0.0.1", () => {
-				this.client.send("a", error => {
-					if (error) {
-						reject(error);
-						this.client.close();
-					} else {
-						resolve();
-					}
-				});
+			this.client.send("a", 27015, "127.0.0.1", error => {
+				if (error) {
+					reject(error);
+					this.client.close();
+				} else {
+					resolve();
+				}
 			});
 		});
 }

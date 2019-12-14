@@ -51,7 +51,7 @@ namespace server
             foreach (byte[] sample in samples)
             {
                 SendSampleToEndpoints(sample);
-                Thread.Sleep(40);
+                Thread.Sleep(20);
             }
         }
     }
