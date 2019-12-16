@@ -41,11 +41,6 @@ namespace server
             // Send new video details to all clients
             foreach (User user in userList)
             {
-                //Dictionary<string, object> data = new Dictionary<string, object>() { { "id", videoQueue[e.NewIndex].Id },
-                //                                                                             { "title", videoQueue[e.NewIndex].Title },
-                //                                                                             { "thumbnailUrl", videoQueue[e.NewIndex].ThumbnailUrl },
-                //                                                                             { "channelTitle", videoQueue[e.NewIndex].ChannelTitle } };
-
                 Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
 
                 try

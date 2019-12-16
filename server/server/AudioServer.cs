@@ -42,7 +42,7 @@ namespace server
         {
             foreach (EndPoint endpoint in endpoints)
             {
-                socket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, (_) => { Console.WriteLine(sample.Length); }, null);
+                socket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
             }
         }
 

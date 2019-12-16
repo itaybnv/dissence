@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,25 +17,30 @@ namespace server
             ytdl = new YoutubeDL();
         }
 
-        public void ById(string id)
+        public void ById(string id, Action<string> callBack)
         {
-            // Download audio only
-            ytdl.Options.PostProcessingOptions.ExtractAudio = true;
-            ytdl.Options.FilesystemOptions.Output = $"./audio_files/{id}.mp3";
-            ytdl.Options.PostProcessingOptions.AudioFormat = NYoutubeDL.Helpers.Enums.AudioFormat.mp3;
-            ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
-
-            // Subscribe to console output
-            ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine("OUTPUT: " + output);
-            ytdl.StandardErrorEvent += (sender, errorOutput) => 
+            // If the file doesn't already exist, download
+            if (!File.Exists($"./audio_files/{id}.mp3"))
             {
-                throw new Exception(errorOutput);
-            };
+                // Download audio only
+                ytdl.Options.PostProcessingOptions.ExtractAudio = true;
+                ytdl.Options.FilesystemOptions.Output = $"./audio_files/{id}.mp3";
+                ytdl.Options.PostProcessingOptions.AudioFormat = NYoutubeDL.Helpers.Enums.AudioFormat.mp3;
+                ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
-            // Execute download
-            ytdl.Download();
+                // Subscribe to console output
+                ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine("OUTPUT: " + output);
+                ytdl.StandardErrorEvent += (sender, errorOutput) => 
+                {
+                    throw new Exception(errorOutput);
+                };
 
-            ConvertMp3ToOpusOgg(id);
+                // Execute download
+                ytdl.Download();
+
+                ConvertMp3ToOpusOgg(id);
+
+            }
 
             Server.AudioServer.BroadcastByFileName(id + ".ogg");
         }
