@@ -27,9 +27,7 @@ namespace server.packets
             {
                 Console.WriteLine(e.Message);
             }
-            //Check if file already exists, if not download and send, if yes just send it
-            //after download, dont send right away, add it to queue in audio server, and audio server will send it alone
-            // when the current audio finished or skipped
+            
             return null;
         }
     }

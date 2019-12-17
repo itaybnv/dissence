@@ -38,11 +38,10 @@ namespace server
 
         private void UpdatePlaylist(object sender, ListChangedEventArgs e)
         {
+            Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
             // Send new video details to all clients
             foreach (User user in userList)
             {
-                Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
-
                 try
                 {
                     user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
@@ -53,19 +52,33 @@ namespace server
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }
-
-            // Send the actual video file to all clients
         }
 
         public void UpdateNicknames(object sender, ListChangedEventArgs e)
         {
+            Dictionary<string, object> data = new Dictionary<string, object>() { {"nicknames", userList.Select(u => u.Nickname).ToList() } };
             foreach (User user in userList)
             {
-                Dictionary<string, object> data = new Dictionary<string, object>() { {"nicknames", userList.Select(u => u.Nickname).ToList() } };
-
                 try
                 {
                     user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.updateNickname)));
+                }
+                catch (Exception error)
+                {
+                    Server.channel.userList.Remove(user);
+                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
+                }
+            }
+        }
+
+        public void UpdatePlayAudio(bool playOrStop)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>() { { "playOrStop", playOrStop } };
+            foreach (User user in userList)
+            {
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.playAudio)));
                 }
                 catch (Exception error)
                 {

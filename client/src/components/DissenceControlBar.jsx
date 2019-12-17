@@ -6,6 +6,8 @@ import { Slider } from "@rmwc/slider";
 import { LinearProgress } from "@rmwc/linear-progress";
 import { Typography } from "@rmwc/typography";
 
+import audioController from "../controllers/AudioController";
+
 import "./DissenceControlBar.scss";
 
 export default class DissenceControlBar extends Component {
@@ -13,7 +15,8 @@ export default class DissenceControlBar extends Component {
 		super(props);
 		this.state = {
 			volumeValue: 45,
-			volumeIcon: ""
+			volumeIcon: "",
+			playIcon: "play_circle_filled"
 		};
 	}
 
@@ -39,6 +42,21 @@ export default class DissenceControlBar extends Component {
 		}
 	};
 
+	onPlay = () => {
+		// Audio is not playing
+		if (this.state.playIcon === "play_circle_filled") {
+			audioController.playAudio(true).then(() => {
+				this.setState({ playIcon: "pause_circle_filled" });
+			});
+		}
+		// Audio is playing
+		else {
+			audioController.playAudio(false).then(() => {
+				this.setState({ playIcon: "play_circle_filled" });
+			});
+		}
+	};
+
 	render() {
 		return (
 			<div className="dissence-controlbar-container">
@@ -59,8 +77,9 @@ export default class DissenceControlBar extends Component {
 					<div className="dissence-media-buttons-container">
 						<Fab
 							className="dissence-play-button"
-							icon="play_circle_filled"
+							icon={this.state.playIcon}
 							mini
+							onClick={this.onPlay}
 						/>
 						<Fab className="dissence-skip-button" icon="skip_next" mini />
 					</div>

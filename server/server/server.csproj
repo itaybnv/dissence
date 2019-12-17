@@ -168,6 +168,7 @@
     <Compile Include="packets\GetSearchResultPacket.cs" />
     <Compile Include="packets\Packet.cs" />
     <Compile Include="PacketEncoding.cs" />
+    <Compile Include="packets\PlayAudioPacket.cs" />
     <Compile Include="packets\ResponsePacket.cs" />
     <Compile Include="packets\UpdateNicknamePacket.cs" />
     <Compile Include="Server.cs" />
@@ -180,6 +181,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

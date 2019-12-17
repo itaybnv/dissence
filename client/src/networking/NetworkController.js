@@ -56,7 +56,6 @@ class NetworkController {
 						.send(packetBuffer)
 						.then(async () => {
 							resolve(await this.responseQueue.shift());
-							console.log("unlocked");
 						})
 						.catch(error => reject(error));
 				})
@@ -66,7 +65,6 @@ class NetworkController {
 				this.lock.acquire("socket", async () => {
 					await this.socket.send(packetBuffer).catch(e => reject(e));
 					resolve();
-					console.log("unlocked");
 				});
 			});
 		}

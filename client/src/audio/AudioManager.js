@@ -1,3 +1,5 @@
+import audioController from "../controllers/AudioController";
+
 const { OpusDecoder, RtAudio } = window.require("audify");
 const dgram = window.require("dgram");
 
@@ -22,14 +24,23 @@ class AudioManager {
 		);
 		this.client = dgram.createSocket("udp4");
 		this.client.on("message", this.handleAudioPacket);
-		this.audio.start();
+
+		// Bind event handler
+		audioController.registerPlayHandler(playOrStop => {
+			playOrStop = JSON.parse(playOrStop.toString());
+			console.log(playOrStop);
+			if (playOrStop.playOrStop) {
+				this.audio.start();
+			} else {
+				this.audio.stop();
+			}
+		});
 	}
 
 	handleAudioPacket = buf => {
 		try {
 			this.audio.write(this.decoder.decode(buf, frameSize));
-		} catch (error) {
-		}
+		} catch (error) {}
 	};
 
 	connect = () =>
