@@ -15,11 +15,16 @@ namespace server
     class Server
     {
         public static Channel channel;
+        public static List<Channel> channels { get; set; }
         public static AudioServer AudioServer { get; set; }
 
         static void Main(string[] args)
         {
-            channel = new Channel();
+            // Create the default public channel
+            channel = new Channel("public");
+            channels = new List<Channel>();
+            channels.Add(channel);
+
             AudioServer = new AudioServer();
             Execute();
         }
@@ -66,7 +71,7 @@ namespace server
                     Socket clientSocket = listener.Accept();
 
                     // Create user and add to channel list
-                    User user = new User(clientSocket);
+                    User user = new User(clientSocket, channels.Where(channel => channel.channelName == "public").First());
                     channel.userList.Add(user);
 
                     // Open a new thread for the user

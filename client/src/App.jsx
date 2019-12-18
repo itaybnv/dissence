@@ -44,7 +44,7 @@ class App extends Component {
 		new Promise((resolve, reject) => {
 			networkController
 				.connect()
-				.then(() => audioManager.connect())
+				.then(() => audioManager.connect("public"))
 				.then(() => {
 					this.setState({ connected: true });
 					resolve();

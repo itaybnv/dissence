@@ -11,10 +11,12 @@ namespace server
     {
         public string Nickname { get; set; }
         public Socket socket { get; }
+        public Channel currentChannel { get; set; }
 
-        public User(Socket socket)
+        public User(Socket socket, Channel currentChannel)
         {
             this.socket = socket;
+            this.currentChannel = currentChannel;
             this.Nickname = "User#" + Guid.NewGuid().ToString().Substring(0, 8);
         }
 

@@ -17,7 +17,7 @@ namespace server
             ytdl = new YoutubeDL();
         }
 
-        public void ById(string id, Action<string> callBack)
+        public void ById(string id, Channel channel)
         {
             // If the file doesn't already exist, download
             if (!File.Exists($"./audio_files/{id}.mp3"))
@@ -42,7 +42,7 @@ namespace server
 
             }
 
-            Server.AudioServer.BroadcastByFileName(id + ".ogg");
+            Server.AudioServer.BroadcastByFileName(id + ".ogg", channel);
         }
 
         private void ConvertMp3ToOpusOgg(string id)

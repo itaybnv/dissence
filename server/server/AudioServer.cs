@@ -11,46 +11,52 @@ namespace server
 {
     class AudioServer
     {
-        private Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private Socket multiSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private List<EndPoint> endpoints = new List<EndPoint>();
 
         public AudioServer()
         {
-            socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            socket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27015));
+            multiSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+            multiSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27015));
             new Thread(Listen).Start();
         }
 
-        public void BroadcastByFileName(string filename)
+        public void BroadcastByFileName(string filename, Channel channel)
         {
             List<byte[]> samples = AudioExtractor.Extract(filename);
-            BroadcastSamples(samples);
+            BroadcastSamples(samples, channel);
         }
 
         private void Listen()
         {
             while (true)
             {
-                // log connections for future reference
+                byte[] data = new byte[2048];
+
                 EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
-                socket.ReceiveFrom(new byte[1], ref senderRemote);
-                endpoints.Add(senderRemote);
+                multiSocket.ReceiveFrom(data, ref senderRemote);
+
+                // Trim the channel name byte array to get rid of empty bytes, and convert it to string
+                string channelName = Encoding.UTF8.GetString(data.TakeWhile((v, index) => data.Skip(index).Any(w => w != 0x00)).ToArray());
+
+                // Get the channel with the name the user sent, and add the user's endpoint to the channel's list list
+                Server.channels.Where(channel => channel.channelName == channelName).First().endpoints.Add(senderRemote);
             }
         }
 
-        private void SendSampleToEndpoints(byte[] sample)
+        private void SendSampleToEndpoints(byte[] sample, Channel channel)
         {
-            foreach (EndPoint endpoint in endpoints)
+            foreach (EndPoint endpoint in channel.endpoints)
             {
-                socket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                multiSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
             }
         }
 
-        private void BroadcastSamples(List<byte[]> samples)
+        private void BroadcastSamples(List<byte[]> samples, Channel channel)
         {
             foreach (byte[] sample in samples)
             {
-                SendSampleToEndpoints(sample);
+                SendSampleToEndpoints(sample, channel);
                 Thread.Sleep(20);
             }
         }

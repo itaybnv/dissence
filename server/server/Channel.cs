@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,12 +12,16 @@ namespace server
     {
         public BindingList<Video> videoQueue { get; }
         public BindingList<User> userList { get; }
+        public List<EndPoint> endpoints { get; }
         public Dictionary<string, Video> searchHistory;
+        public string channelName { get; set; }
 
-        public Channel()
+        public Channel(string channelName)
         {
+            this.channelName = channelName;
             videoQueue = new BindingList<Video>();
             userList = new BindingList<User>();
+            endpoints = new List<EndPoint>();
             searchHistory = new Dictionary<string, Video>();
 
             videoQueue.ListChanged += (sender, e) =>

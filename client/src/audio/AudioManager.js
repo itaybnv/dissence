@@ -6,13 +6,14 @@ const dgram = window.require("dgram");
 const sampleRate = 48000;
 const frameDuration = 40;
 const channels = 2;
-const bitDepth = 16;
 const frameSize = (sampleRate * frameDuration) / 1000;
 
 class AudioManager {
 	constructor() {
 		this.decoder = new OpusDecoder(sampleRate, channels);
 		this.audio = new RtAudio();
+		this.client = dgram.createSocket("udp4");
+
 		this.audio.openStream(
 			{ nChannels: channels, deviceId: 4 },
 			null,
@@ -22,13 +23,11 @@ class AudioManager {
 			"DissenceStream",
 			null
 		);
-		this.client = dgram.createSocket("udp4");
 		this.client.on("message", this.handleAudioPacket);
 
 		// Bind event handler
 		audioController.registerPlayHandler(playOrStop => {
 			playOrStop = JSON.parse(playOrStop.toString());
-			console.log(playOrStop);
 			if (playOrStop.playOrStop) {
 				this.audio.start();
 			} else {
@@ -43,9 +42,9 @@ class AudioManager {
 		} catch (error) {}
 	};
 
-	connect = () =>
+	connect = channelName =>
 		new Promise((resolve, reject) => {
-			this.client.send("a", 27015, "127.0.0.1", error => {
+			this.client.send(channelName, 27015, "127.0.0.1", error => {
 				if (error) {
 					reject(error);
 					this.client.close();

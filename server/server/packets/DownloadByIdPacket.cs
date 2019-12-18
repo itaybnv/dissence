@@ -21,7 +21,7 @@ namespace server.packets
             DownloadHandler downloadHandler = new DownloadHandler();
             try
             {
-                new Thread(() => downloadHandler.ById(data["id"].ToString(), Server.AudioServer.BroadcastByFileName)).Start();
+                new Thread(() => downloadHandler.ById(data["id"].ToString(), user.currentChannel)).Start();
             }
             catch (Exception e)
             {
