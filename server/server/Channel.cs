@@ -13,15 +13,39 @@ namespace server
         public BindingList<Video> videoQueue { get; }
         public BindingList<User> userList { get; }
         public List<EndPoint> endpoints { get; }
+        public BindingList<string> audioServerQueue { get; }
         public Dictionary<string, Video> searchHistory;
         public string channelName { get; set; }
+        public bool skipped { get; set; }
+
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                // If before was busy, and after isn't busy
+                // it means it should go to the next audio
+                if(isBusy && !value)
+                {
+                    isBusy = value;
+                    PlayAudio();
+                }
+
+                isBusy = value;
+            }
+        }
 
         public Channel(string channelName)
         {
             this.channelName = channelName;
+
+            IsBusy = false;
+            skipped = false;
             videoQueue = new BindingList<Video>();
             userList = new BindingList<User>();
             endpoints = new List<EndPoint>();
+            audioServerQueue = new BindingList<string>();
             searchHistory = new Dictionary<string, Video>();
 
             videoQueue.ListChanged += (sender, e) =>
@@ -37,6 +61,15 @@ namespace server
                 if (e.ListChangedType == ListChangedType.ItemDeleted)
                 {
                     UpdateNicknames(sender, e);
+                }
+            };
+
+            audioServerQueue.ListChanged += (sender, e) =>
+            {
+                // This is only in case the list was empty before 
+                if (e.ListChangedType == ListChangedType.ItemAdded && !isBusy)
+                {
+                    PlayAudio();
                 }
             };
         }
@@ -91,6 +124,22 @@ namespace server
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }
+        }
+
+        public void PlayAudio()
+        {
+            // if queue isn't empty
+            if (audioServerQueue.Count > 0)
+            {
+                // Pop first item
+                string filename = audioServerQueue.First();
+                audioServerQueue.RemoveAt(0);
+
+                isBusy = true;
+                Server.AudioServer.BroadcastByFileName(filename, this);
+            }
+            // else do nothing
+
         }
     }
 }

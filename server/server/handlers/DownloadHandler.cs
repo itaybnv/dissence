@@ -42,7 +42,8 @@ namespace server
 
             }
 
-            Server.AudioServer.BroadcastByFileName(id + ".ogg", channel);
+            //Server.AudioServer.BroadcastByFileName(id + ".ogg", channel);
+            channel.audioServerQueue.Add(id + ".ogg");
         }
 
         private void ConvertMp3ToOpusOgg(string id)

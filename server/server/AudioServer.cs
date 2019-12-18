@@ -63,9 +63,25 @@ namespace server
         {
             foreach (byte[] sample in samples)
             {
-                SendSampleToEndpoints(sample, channel);
-                Thread.Sleep(20);
+                // If the channels gets unbusy in the middle of playing an audio
+                // it means one of the users skipped the playing song.
+                // Channel skipped is changed by a recieved tcp packet from clients.
+                if (channel.IsBusy && !channel.skipped)
+                {
+                    SendSampleToEndpoints(sample, channel);
+                    Thread.Sleep(20);
+                }
+                // Skipped
+                else
+                {
+                    // Reset bools
+                    channel.IsBusy = false;
+                    channel.skipped = false;
+                }
             }
+
+            // Finished playing, tell the channel that it is done
+            channel.IsBusy = false;
         }
     }
 }
