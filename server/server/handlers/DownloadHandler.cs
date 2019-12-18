@@ -42,7 +42,6 @@ namespace server
 
             }
 
-            //Server.AudioServer.BroadcastByFileName(id + ".ogg", channel);
             channel.audioServerQueue.Add(id + ".ogg");
         }
 
