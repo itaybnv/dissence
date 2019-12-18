@@ -48,7 +48,14 @@ namespace server
         {
             foreach (EndPoint endpoint in channel.endpoints)
             {
-                multiSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                try
+                {
+                    multiSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                }
+                catch (Exception)
+                {
+                    channel.endpoints.Remove(endpoint);
+                }
             }
         }
 
