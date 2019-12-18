@@ -49,7 +49,13 @@ namespace server
         {
             Engine ffmpeg = new Engine();
 
-            ffmpeg.ExecuteAsync($"-i ./audio_files/{id}.mp3 -c:a libopus -b:a 128k -compression_level 10 -application audio -ar 48000 -frame_duration 40 ./audio_files/{id}.ogg").Wait();
+            ffmpeg.ExecuteAsync($"-i ./audio_files/{id}.mp3 " +
+                                "-c:a libopus " +
+                                "-b:a 128k " +
+                                "-compression_level 10 " +
+                                "-application audio " +
+                                "-ar 48000 " +
+                                $"-frame_duration 40 ./audio_files/{id}.ogg").Wait();
 
 
         }
