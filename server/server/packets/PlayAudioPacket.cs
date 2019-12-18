@@ -15,7 +15,6 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            Console.WriteLine("REACHEDADASDASDA");
             Server.channel.UpdatePlayAudio((bool)data["playOrStop"]);
             return null;
         }
