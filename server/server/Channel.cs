@@ -30,6 +30,9 @@ namespace server
                 {
                     isBusy = value;
                     PlayAudio();
+
+                    videoQueue.RemoveAt(0);
+                    UpdatePlaylist(null, null);
                 }
 
                 isBusy = value;
@@ -74,7 +77,7 @@ namespace server
             };
         }
 
-        private void UpdatePlaylist(object sender, ListChangedEventArgs e)
+        public void UpdatePlaylist(object sender, ListChangedEventArgs e)
         {
             Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
             // Send new video details to all clients
@@ -139,7 +142,27 @@ namespace server
                 Server.AudioServer.BroadcastByFileName(filename, this);
             }
             // else do nothing
+        }
 
+        public void SkipAudio()
+        {
+            // Skip the audio for each client
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            foreach (User user in userList)
+            {
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.skipAudio)));
+                }
+                catch (Exception error)
+                {
+                    Server.channel.userList.Remove(user);
+                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
+                }
+            }
+
+            // Finished playing / skipped
+            UpdatePlaylist(null, null);
         }
     }
 }

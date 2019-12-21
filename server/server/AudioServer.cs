@@ -35,7 +35,7 @@ namespace server
 
                 EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
                 multiSocket.ReceiveFrom(data, ref senderRemote);
-
+ 
                 // Trim the channel name byte array to get rid of empty bytes, and convert it to string
                 string channelName = Encoding.UTF8.GetString(data.TakeWhile((v, index) => data.Skip(index).Any(w => w != 0x00)).ToArray());
 
@@ -69,7 +69,7 @@ namespace server
                 if (channel.IsBusy && !channel.skipped)
                 {
                     SendSampleToEndpoints(sample, channel);
-                    Thread.Sleep(20);
+                    Thread.Sleep(36);
                 }
                 // Skipped
                 else
@@ -77,6 +77,9 @@ namespace server
                     // Reset bools
                     channel.IsBusy = false;
                     channel.skipped = false;
+
+                    // Skip this song
+                    return;
                 }
             }
 

@@ -169,6 +169,7 @@
     <Compile Include="packets\Packet.cs" />
     <Compile Include="encoding\PacketEncoding.cs" />
     <Compile Include="packets\PlayAudioPacket.cs" />
+    <Compile Include="packets\SkipAudioPacket.cs" />
     <Compile Include="packets\ResponsePacket.cs" />
     <Compile Include="packets\UpdateNicknamePacket.cs" />
     <Compile Include="Server.cs" />

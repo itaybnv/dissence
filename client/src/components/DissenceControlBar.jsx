@@ -81,7 +81,12 @@ export default class DissenceControlBar extends Component {
 							mini
 							onClick={this.onPlay}
 						/>
-						<Fab className="dissence-skip-button" icon="skip_next" mini />
+						<Fab
+							className="dissence-skip-button"
+							icon="skip_next"
+							mini
+							onClick={audioController.skipCurrent}
+						/>
 					</div>
 					<div className="dissence-progress-bar-container">
 						<LinearProgress progress={0.1} buffer={0.4}></LinearProgress>

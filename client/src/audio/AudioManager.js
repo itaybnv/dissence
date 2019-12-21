@@ -25,7 +25,7 @@ class AudioManager {
 		);
 		this.client.on("message", this.handleAudioPacket);
 
-		// Bind event handler
+		// Bind event handlers
 		audioController.registerPlayHandler(playOrStop => {
 			playOrStop = JSON.parse(playOrStop.toString());
 			if (playOrStop.playOrStop) {
@@ -33,6 +33,12 @@ class AudioManager {
 			} else {
 				this.audio.stop();
 			}
+		});
+
+		audioController.registerSkipHandler(() => {
+			this.audio.stop();
+			this.audio.clearOutputQueue();
+			this.audio.start();
 		});
 	}
 

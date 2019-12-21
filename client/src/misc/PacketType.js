@@ -6,7 +6,8 @@ const PacketType = {
 	DOWNLOAD_BY_ID: 200,
 	ADD_TO_PLAYLIST: 201,
 	UPDATE_NICKNAME: 202,
-	PLAY_AUDIO: 203
+	PLAY_AUDIO: 203,
+	SKIP_AUDIO: 204,
 };
 
 export default PacketType;

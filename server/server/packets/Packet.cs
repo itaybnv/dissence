@@ -10,14 +10,17 @@ namespace server
 {
     enum PacketType
     {
+        // From 0 normal
         getConnectedUsers,
         getSearchResults,
         getPlaylist,
 
+        // From 200 events
         downloadById = 200,
-        addToPlaylist = 201,
-        updateNickname = 202,
-        playAudio = 203
+        addToPlaylist,
+        updateNickname,
+        playAudio,
+        skipAudio
     }
 
     abstract class Packet
