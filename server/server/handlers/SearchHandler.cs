@@ -71,7 +71,6 @@ namespace server
                                              searchResult.Snippet.Thumbnails.Medium.Url,
                                              videoResult.ContentDetails.Duration);
                     resultList.Add(vid);
-                    Server.channel.searchHistory[vid.Id] = vid;
                 }
             }
             return resultList;

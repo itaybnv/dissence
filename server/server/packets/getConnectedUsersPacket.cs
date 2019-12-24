@@ -18,7 +18,7 @@ namespace server
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
             // select just the nicknames from the userlist
-            data.Add("nicknames", Server.channel.userList.Select(u => u.Nickname).ToArray());
+            data.Add("nicknames", user.currentChannel.userList.Select(u => u.Nickname).ToArray());
             ResponsePacket responsePacket = new ResponsePacket(data, PacketType.getConnectedUsers);
 
             return responsePacket;

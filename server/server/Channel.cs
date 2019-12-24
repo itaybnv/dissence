@@ -14,7 +14,6 @@ namespace server
         public BindingList<User> userList { get; }
         public List<EndPoint> endpoints { get; }
         public BindingList<string> audioServerQueue { get; }
-        public Dictionary<string, Video> searchHistory;
         public string channelName { get; set; }
         public bool skipped { get; set; }
 
@@ -49,7 +48,6 @@ namespace server
             userList = new BindingList<User>();
             endpoints = new List<EndPoint>();
             audioServerQueue = new BindingList<string>();
-            searchHistory = new Dictionary<string, Video>();
 
             videoQueue.ListChanged += (sender, e) =>
             {
@@ -89,7 +87,7 @@ namespace server
                 }
                 catch (Exception error)
                 {
-                    Server.channel.userList.Remove(user);
+                    userList.Remove(user);
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }
@@ -106,7 +104,7 @@ namespace server
                 }
                 catch (Exception error)
                 {
-                    Server.channel.userList.Remove(user);
+                    userList.Remove(user);
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }
@@ -123,7 +121,7 @@ namespace server
                 }
                 catch (Exception error)
                 {
-                    Server.channel.userList.Remove(user);
+                    userList.Remove(user);
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }
@@ -156,7 +154,7 @@ namespace server
                 }
                 catch (Exception error)
                 {
-                    Server.channel.userList.Remove(user);
+                    userList.Remove(user);
                     Console.WriteLine(Server.GetLineAndFile() + error.Message);
                 }
             }

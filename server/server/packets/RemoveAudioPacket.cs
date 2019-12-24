@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace server.packets
 {
-    class PlayAudioPacket : Packet
+    class RemoveAudioPacket : Packet
     {
-        public PlayAudioPacket(Dictionary<string, object> data) : base(PacketType.playAudio, data)
+        public RemoveAudioPacket(Dictionary<string, object> data) : base(PacketType.RemoveAudio, data)
         {
-
         }
 
         public override ResponsePacket Execute(User user)
         {
-            user.currentChannel.UpdatePlayAudio((bool)data["playOrStop"]);
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

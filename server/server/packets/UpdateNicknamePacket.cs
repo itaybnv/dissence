@@ -19,7 +19,7 @@ namespace server.packets
             user.Nickname = data["nickname"].ToString();
 
             // send to all users the updated nickname
-            Server.channel.UpdateNicknames(null, null);
+            user.currentChannel.UpdateNicknames(null, null);
             return null;
         }
     }

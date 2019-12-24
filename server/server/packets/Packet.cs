@@ -20,7 +20,8 @@ namespace server
         addToPlaylist,
         updateNickname,
         playAudio,
-        skipAudio
+        skipAudio,
+        RemoveAudio
     }
 
     abstract class Packet

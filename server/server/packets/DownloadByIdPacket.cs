@@ -17,7 +17,7 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            Server.channel.videoQueue.Add(new Video(data["title"].ToString(), data["channelTitle"].ToString(), data["id"].ToString(), data["thumbnailUrl"].ToString(), null));
+            user.currentChannel.videoQueue.Add(new Video(data["title"].ToString(), data["channelTitle"].ToString(), data["id"].ToString(), data["thumbnailUrl"].ToString(), null));
             DownloadHandler downloadHandler = new DownloadHandler();
             try
             {

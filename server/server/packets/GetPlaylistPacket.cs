@@ -15,7 +15,7 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", Server.channel.videoQueue } };
+            Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", user.currentChannel.videoQueue } };
             ResponsePacket responsePacket = new ResponsePacket(data, PacketType.getPlaylist);
 
             return responsePacket;
