@@ -1,4 +1,5 @@
 import audioController from "../controllers/AudioController";
+import playlistController from "../controllers/PlaylistController";
 
 const { OpusDecoder, RtAudio } = window.require("audify");
 const dgram = window.require("dgram");
@@ -35,7 +36,7 @@ class AudioManager {
 			}
 		});
 
-		audioController.registerSkipHandler(() => {
+		playlistController.registerSkipHandler(() => {
 			this.audio.stop();
 			this.audio.clearOutputQueue();
 			this.audio.start();

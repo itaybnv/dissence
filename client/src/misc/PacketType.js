@@ -8,6 +8,7 @@ const PacketType = {
 	UPDATE_NICKNAME: 202,
 	PLAY_AUDIO: 203,
 	SKIP_AUDIO: 204,
+	REMOVE_AUDIO: 205,
 };
 
 export default PacketType;

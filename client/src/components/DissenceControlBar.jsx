@@ -9,6 +9,7 @@ import { Typography } from "@rmwc/typography";
 import audioController from "../controllers/AudioController";
 
 import "./DissenceControlBar.scss";
+import playlistController from "../controllers/PlaylistController";
 
 export default class DissenceControlBar extends Component {
 	constructor(props) {
@@ -85,7 +86,7 @@ export default class DissenceControlBar extends Component {
 							className="dissence-skip-button"
 							icon="skip_next"
 							mini
-							onClick={audioController.skipCurrent}
+							onClick={playlistController.skipCurrent}
 						/>
 					</div>
 					<div className="dissence-progress-bar-container">

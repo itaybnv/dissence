@@ -13,6 +13,7 @@ export default class DissencePlaylist extends Component {
 				return (
 					<DissencePlaylistItem
 						key={item.Id}
+						id={item.Id}
 						videoTitle={item.Title}
 						channelTitle={item.ChannelTitle}
 						videoThumbnailUrl={item.ThumbnailUrl}

@@ -7,6 +7,7 @@ import { SimpleMenu, MenuItem } from "@rmwc/menu";
 import Ticker from "react-ticker";
 
 import "./DissencePlaylistItem.scss";
+import playlistController from "../controllers/PlaylistController";
 
 export default class DissencePlaylistItem extends Component {
 	constructor(props) {
@@ -75,7 +76,11 @@ export default class DissencePlaylistItem extends Component {
 	render() {
 		return (
 			<SimpleMenu anchorCorner="bottomLeft" handle={this.getListItem()}>
-				<MenuItem>Remove</MenuItem>
+				<MenuItem
+					onClick={() => playlistController.removeSelected(this.props.id)}
+				>
+					Remove
+				</MenuItem>
 				<MenuItem>Bump</MenuItem>
 			</SimpleMenu>
 		);

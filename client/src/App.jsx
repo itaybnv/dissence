@@ -72,10 +72,21 @@ class App extends Component {
 
 	registerPlaylistHandler = () => {
 		playlistController.registerEventHandler(data => {
-			console.log("before yeet data", data.toString())
+			console.log("before yeet data", data.toString());
 			data = JSON.parse(data.toString());
 			console.log("yeet data", data);
 			this.setState({ playlist: [...data.playlist] });
+		});
+	};
+
+	registerRemoveHandler = () => {
+		playlistController.registerRemoveHandler(id => {
+			// Copy playlist
+			let newPlaylist = this.state.playlist.slice();
+			// Filter the removed id
+			newPlaylist = newPlaylist.filter(item => item !== id);
+			// Set state
+			this.setState({ playlist: newPlaylist });
 		});
 	};
 
@@ -111,6 +122,7 @@ class App extends Component {
 
 		this.registerNicknameHandler();
 		this.registerPlaylistHandler();
+		this.registerRemoveHandler();
 	};
 
 	componentDidMount() {
