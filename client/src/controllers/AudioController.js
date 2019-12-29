@@ -5,7 +5,7 @@ class AudioController {
 	registerPlayHandler = handler => {
 		networkController.registerEventHandler(handler, PacketType.PLAY_AUDIO);
 	};
-	
+
 	// playOrStop is a bool:
 	// true is play the audio false is stop the audio
 	playAudio = playOrStop =>
