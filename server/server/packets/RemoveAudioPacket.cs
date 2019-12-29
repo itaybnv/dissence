@@ -14,7 +14,8 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            throw new NotImplementedException();
+            user.currentChannel.RemoveAudio((string)data["id"]);
+            return null;
         }
     }
 }

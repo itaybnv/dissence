@@ -18,7 +18,8 @@ namespace server
             { PacketType.updateNickname, typeof(UpdateNicknamePacket) },
             { PacketType.getPlaylist, typeof(GetPlaylistPacket) },
             { PacketType.playAudio, typeof(PlayAudioPacket) },
-            { PacketType.skipAudio, typeof(SkipAudioPacket) }
+            { PacketType.skipAudio, typeof(SkipAudioPacket) },
+            { PacketType.RemoveAudio, typeof(RemoveAudioPacket) }
         };
 
         public static Packet DecodePacket(byte[] packet, int packetType)

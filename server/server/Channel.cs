@@ -30,8 +30,9 @@ namespace server
                     isBusy = value;
                     PlayAudio();
 
+                    // This removes the video from videoqueue after it finished playing
                     videoQueue.RemoveAt(0);
-                    UpdatePlaylist(null, null);
+                    return;
                 }
 
                 isBusy = value;
@@ -51,10 +52,8 @@ namespace server
 
             videoQueue.ListChanged += (sender, e) =>
             {
-                if (e.ListChangedType == ListChangedType.ItemAdded)
-                {
-                    UpdatePlaylist(sender, e);
-                }
+                //THIS IS PROBABLY THE PROBLEM, DOUBLE SENDING IM NOT SUPPOSED TO CALL UPDATE PLAYLIST, JUST UPDATE VIDEOQUEUE
+                UpdatePlaylist(sender, e);
             };
 
             userList.ListChanged += (sender, e) =>
@@ -161,6 +160,12 @@ namespace server
 
             // Finished playing / skipped
             UpdatePlaylist(null, null);
+        }
+
+        public void RemoveAudio(string id)
+        {
+            videoQueue.Remove(videoQueue.Where(video => video.Id == id).First());
+            audioServerQueue.RemoveAt(audioServerQueue.IndexOf(id));
         }
     }
 }
