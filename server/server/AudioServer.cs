@@ -11,13 +11,17 @@ namespace server
 {
     class AudioServer
     {
-        private Socket multiSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private List<EndPoint> endpoints = new List<EndPoint>();
 
         public AudioServer()
         {
-            multiSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            multiSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27015));
+            listenSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+            listenSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27015));
+
+            sendSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+            sendSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27016));
             new Thread(Listen).Start();
         }
 
@@ -29,18 +33,28 @@ namespace server
 
         private void Listen()
         {
+            EndPoint senderRemote;
             while (true)
             {
                 byte[] data = new byte[2048];
 
-                EndPoint senderRemote = new IPEndPoint(IPAddress.Any, 0);
-                multiSocket.ReceiveFrom(data, ref senderRemote);
- 
-                // Trim the channel name byte array to get rid of empty bytes, and convert it to string
-                string channelName = Encoding.UTF8.GetString(data.TakeWhile((v, index) => data.Skip(index).Any(w => w != 0x00)).ToArray());
+                senderRemote = new IPEndPoint(IPAddress.Any, 0);
 
-                // Get the channel with the name the user sent, and add the user's endpoint to the channel's list list
-                Server.channels.Where(channel => channel.channelName == channelName).First().endpoints.Add(senderRemote);
+                try
+                {
+                    listenSocket.ReceiveFrom(data, ref senderRemote);
+
+                    // Trim the channel name byte array to get rid of empty bytes, and convert it to string
+                    string channelName = Encoding.UTF8.GetString(data.TakeWhile((v, index) => data.Skip(index).Any(w => w != 0x00)).ToArray());
+
+                    // Get the channel with the name the user sent, and add the user's endpoint to the channel's list list
+                    Server.channels.Where(channel => channel.channelName == channelName).First().endpoints.Add(senderRemote);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+ 
             }
         }
 
@@ -50,7 +64,7 @@ namespace server
             {
                 try
                 {
-                    multiSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                    sendSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
                 }
                 catch (Exception)
                 {

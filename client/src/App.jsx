@@ -72,6 +72,7 @@ class App extends Component {
 
 	registerPlaylistHandler = () => {
 		playlistController.registerEventHandler(data => {
+			console.log("before yeet data", data.toString())
 			data = JSON.parse(data.toString());
 			console.log("yeet data", data);
 			this.setState({ playlist: [...data.playlist] });
