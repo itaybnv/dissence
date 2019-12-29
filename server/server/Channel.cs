@@ -133,7 +133,7 @@ namespace server
             if (audioServerQueue.Count > 0)
             {
                 // Pop first item
-                string filename = audioServerQueue.First();
+                string filename = audioServerQueue.First() + ".ogg";
                 audioServerQueue.RemoveAt(0);
 
                 isBusy = true;
