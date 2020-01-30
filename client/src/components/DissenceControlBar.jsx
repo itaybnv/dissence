@@ -10,6 +10,7 @@ import audioController from "../controllers/AudioController";
 
 import "./DissenceControlBar.scss";
 import playlistController from "../controllers/PlaylistController";
+import audioManager from "../audio/AudioManager";
 
 export default class DissenceControlBar extends Component {
 	constructor(props) {
@@ -27,8 +28,10 @@ export default class DissenceControlBar extends Component {
 
 	changeVolume = value => {
 		this.setState({ volumeValue: value });
-
 		this.setVolumeIcon();
+
+		//change actual volume
+		audioManager.setVolume(value / 100);
 	};
 
 	setVolumeIcon = () => {
@@ -98,6 +101,7 @@ export default class DissenceControlBar extends Component {
 					<Slider
 						className="dissence-volume-slider"
 						value={this.state.volumeValue}
+						step={0.1}
 						onChange={evt => this.changeVolume(evt.detail.value)}
 						onInput={evt => this.changeVolume(evt.detail.value)}
 					/>

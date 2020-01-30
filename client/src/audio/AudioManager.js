@@ -60,6 +60,10 @@ class AudioManager {
 				}
 			});
 		});
+
+	setVolume = value => {
+		this.audio.outputVolume = value;
+	};
 }
 
 const audioManager = new AudioManager();

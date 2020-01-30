@@ -9,11 +9,11 @@ import DissencePlaylistItem from "./DissencePlaylistItem";
 export default class DissencePlaylist extends Component {
 	getPlaylist = () => {
 		if (this.props.playlist) {
-			return this.props.playlist.map(item => {
+			return this.props.playlist.map((item, index) => {
 				return (
 					<DissencePlaylistItem
 						key={item.Id}
-						id={item.Id}
+						index={index}
 						videoTitle={item.Title}
 						channelTitle={item.ChannelTitle}
 						videoThumbnailUrl={item.ThumbnailUrl}
