@@ -37,7 +37,8 @@ class App extends Component {
 		connected: null,
 		nickname: "",
 		nicknames: [],
-		playlist: []
+		playlist: [],
+		progress: 0
 	};
 
 	connectToServer = () =>
@@ -72,21 +73,22 @@ class App extends Component {
 
 	registerPlaylistHandler = () => {
 		playlistController.registerEventHandler(data => {
-			console.log("before yeet data", data.toString());
+			// If the new playlist's first in queue is different than the old one, reset progress
+			if (this.state.playlist && data.playlist) {
+				if (this.state.playlist[0] !== data.playlist[0]) {
+					this.setState({ progress: 0 });
+				}
+			}
 			data = JSON.parse(data.toString());
-			console.log("yeet data", data);
 			this.setState({ playlist: [...data.playlist] });
-		});
-	};
 
-	registerRemoveHandler = () => {
-		playlistController.registerRemoveHandler(id => {
-			// Copy playlist
-			let newPlaylist = this.state.playlist.slice();
-			// Filter the removed id
-			newPlaylist = newPlaylist.filter(item => item !== id);
-			// Set state
-			this.setState({ playlist: newPlaylist });
+			// Set the progress per frame
+			// Every frame is 40 miliseconds, divide by the total length
+			// of the currently playing, and you get the progress per frame.
+			if (this.state.playlist[0]) {
+				audioManager.progressPerFrame =
+					40 / parseInt(this.state.playlist[0].VideoLength);
+			}
 		});
 	};
 
@@ -122,7 +124,6 @@ class App extends Component {
 
 		this.registerNicknameHandler();
 		this.registerPlaylistHandler();
-		this.registerRemoveHandler();
 	};
 
 	componentDidMount() {
@@ -139,6 +140,11 @@ class App extends Component {
 					const electron = window.require("electron");
 					electron.remote.app.quit();
 				}
+			});
+		});
+		audioManager.setFrameCallback(() => {
+			this.setState({
+				progress: this.state.progress + audioManager.progressPerFrame
 			});
 		});
 
@@ -208,7 +214,10 @@ class App extends Component {
 						/>
 					</div>
 					<div className="dissence-footer-container">
-						<DissenceControlBar connected={this.state.connected} />
+						<DissenceControlBar
+							connected={this.state.connected}
+							progress={this.state.progress}
+						/>
 					</div>
 				</div>
 			);

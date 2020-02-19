@@ -52,7 +52,7 @@ namespace server
 
             videoQueue.ListChanged += (sender, e) =>
             {
-                //THIS IS PROBABLY THE PROBLEM, DOUBLE SENDING IM NOT SUPPOSED TO CALL UPDATE PLAYLIST, JUST UPDATE VIDEOQUEUE
+                Console.WriteLine("list changed type" + e.ListChangedType.ToString());
                 UpdatePlaylist(sender, e);
             };
 
@@ -82,6 +82,7 @@ namespace server
             {
                 try
                 {
+                    Console.WriteLine(Encoding.UTF8.GetString(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist))));
                     user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
                 }
                 catch (Exception error)
@@ -143,29 +144,29 @@ namespace server
 
         public void SkipAudio()
         {
-            // Skip the audio for each client
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            foreach (User user in userList)
-            {
-                try
-                {
-                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.skipAudio)));
-                }
-                catch (Exception error)
-                {
-                    userList.Remove(user);
-                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
-                }
-            }
+            //// Skip the audio for each client
+            //Dictionary<string, object> data = new Dictionary<string, object>();
+            //foreach (User user in userList)
+            //{
+            //    try
+            //    {
+            //        user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.skipAudio)));
+            //    }
+            //    catch (Exception error)
+            //    {
+            //        userList.Remove(user);
+            //        Console.WriteLine(Server.GetLineAndFile() + error.Message);
+            //    }
+            //}
 
             // Finished playing / skipped
             UpdatePlaylist(null, null);
         }
 
-        public void RemoveAudio(string id)
+        public void RemoveAudio(int index)
         {
-            videoQueue.Remove(videoQueue.Where(video => video.Id == id).First());
-            audioServerQueue.RemoveAt(audioServerQueue.IndexOf(id));
+            videoQueue.RemoveAt(index);
+            audioServerQueue.RemoveAt(index - 1);
         }
     }
 }

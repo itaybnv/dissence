@@ -18,7 +18,7 @@ export default class DissenceControlBar extends Component {
 		this.state = {
 			volumeValue: 45,
 			volumeIcon: "",
-			playIcon: "play_circle_filled"
+			playIcon: "play_circle_filled",
 		};
 	}
 
@@ -93,7 +93,7 @@ export default class DissenceControlBar extends Component {
 						/>
 					</div>
 					<div className="dissence-progress-bar-container">
-						<LinearProgress progress={0.1} buffer={0.4}></LinearProgress>
+						<LinearProgress progress={this.props.progress}></LinearProgress>
 					</div>
 				</div>
 				<div className="dissence-volume-control-container">

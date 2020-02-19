@@ -10,10 +10,6 @@ class PlaylistController {
 		networkController.registerEventHandler(handler, PacketType.SKIP_AUDIO);
 	};
 
-	registerRemoveHandler = handler => {
-		networkController.registerEventHandler(handler, PacketType.REMOVE_AUDIO);
-	};
-
 	downloadToPlaylist = video =>
 		new Promise((resolve, reject) => {
 			let dataBuffer = Buffer.from(JSON.stringify(video));
@@ -39,10 +35,18 @@ class PlaylistController {
 		});
 	};
 
-	removeSelected = id => {
+	removeSelected = index => {
 		new Promise(resolve => {
 			networkController
-				.send(Buffer.from(JSON.stringify({ id })), PacketType.REMOVE_AUDIO)
+				.send(Buffer.from(JSON.stringify({ index })), PacketType.REMOVE_AUDIO)
+				.then(resolve);
+		});
+	};
+
+	bumpSelected = index => {
+		new Promise(resolve => {
+			networkController
+				.send(Buffer.from(JSON.stringify({ index })), PacketType.BUMP_AUDIO)
 				.then(resolve);
 		});
 	};

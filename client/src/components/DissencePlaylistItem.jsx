@@ -77,11 +77,15 @@ export default class DissencePlaylistItem extends Component {
 		return (
 			<SimpleMenu anchorCorner="bottomLeft" handle={this.getListItem()}>
 				<MenuItem
-					onClick={() => playlistController.removeSelected(this.props.id)}
+					onClick={() => playlistController.removeSelected(this.props.index)}
 				>
 					Remove
 				</MenuItem>
-				<MenuItem>Bump</MenuItem>
+				<MenuItem
+					onClick={() => playlistController.bumpSelected(this.props.index)}
+				>
+					Bump
+				</MenuItem>
 			</SimpleMenu>
 		);
 	}

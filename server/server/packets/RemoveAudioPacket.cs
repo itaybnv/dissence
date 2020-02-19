@@ -14,7 +14,7 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            user.currentChannel.RemoveAudio((string)data["id"]);
+            user.currentChannel.RemoveAudio(int.Parse((string)data["index"]));
             return null;
         }
     }

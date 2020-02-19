@@ -17,6 +17,7 @@ export default class SocketWrapper {
 	send = buffer =>
 		new Promise((resolve, reject) => {
 			try {
+				console.log(buffer, buffer.toString());
 				this.socket.write(buffer);
 				resolve();
 			} catch (error) {
@@ -24,7 +25,11 @@ export default class SocketWrapper {
 			}
 		});
 
-	registerReceiveHandler = handler => this.socket.on("data", handler);
+	registerReceiveHandler = handler =>
+		this.socket.on("data", e => {
+			console.log(e, e.toString());
+			handler(e);
+		});
 
-	registerCloseHandler = handler => this.socket.on("close", handler); 
+	registerCloseHandler = handler => this.socket.on("close", handler);
 }

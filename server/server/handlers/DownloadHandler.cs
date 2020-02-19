@@ -41,7 +41,6 @@ namespace server
                 ConvertMp3ToOpusOgg(id);
 
             }
-
             channel.audioServerQueue.Add(id);
         }
 

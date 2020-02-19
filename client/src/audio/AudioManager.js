@@ -14,6 +14,7 @@ class AudioManager {
 		this.decoder = new OpusDecoder(sampleRate, channels);
 		this.audio = new RtAudio();
 		this.client = dgram.createSocket("udp4");
+		this.progressPerFrame = 0;
 
 		this.audio.openStream(
 			{ nChannels: channels, deviceId: 4 },
@@ -42,6 +43,10 @@ class AudioManager {
 			this.audio.start();
 		});
 	}
+
+	setFrameCallback = callback => {
+		this.audio.setFrameOutputCallback(callback);
+	};
 
 	handleAudioPacket = buf => {
 		try {

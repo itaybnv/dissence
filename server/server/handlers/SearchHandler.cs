@@ -26,7 +26,7 @@ namespace server
             // Create a connection with youtube service
             youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyAHO8-R_5p0gw8skqwyPKtsGLLiTslqCJ4",
+                ApiKey = "AIzaSyC8V4-4GmKmEoq34bqh3-YI8LR3fJYtqwA",
                 ApplicationName = this.GetType().ToString()
             });
         }
