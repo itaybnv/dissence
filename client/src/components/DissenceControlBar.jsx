@@ -16,7 +16,7 @@ export default class DissenceControlBar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			volumeValue: 45,
+			volumeValue: 3,
 			volumeIcon: "",
 			playIcon: "play_circle_filled",
 		};

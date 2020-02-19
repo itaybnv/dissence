@@ -151,7 +151,6 @@ namespace server
                 responsePacket = packet.Execute(user);
                 if (responsePacket != null)
                 {
-                    Console.WriteLine("נכנס לif");
                     try
                     {
                         user.socket.Send(PacketEncoding.EncodeResponsePacket(responsePacket));

@@ -40,6 +40,7 @@ class AudioManager {
 		playlistController.registerSkipHandler(() => {
 			this.audio.stop();
 			this.audio.clearOutputQueue();
+			console.log("clear");
 			this.audio.start();
 		});
 	}

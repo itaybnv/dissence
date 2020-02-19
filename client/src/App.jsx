@@ -78,6 +78,8 @@ class App extends Component {
 				if (this.state.playlist[0] !== data.playlist[0]) {
 					this.setState({ progress: 0 });
 				}
+			} else {
+				this.setState({ progress: 0 });
 			}
 			data = JSON.parse(data.toString());
 			this.setState({ playlist: [...data.playlist] });
@@ -104,7 +106,6 @@ class App extends Component {
 
 		// fetch playlist
 		playlistController.getPlaylist().then(res => {
-			console.log("res playlist", res);
 			this.setState({ playlist: res.playlist });
 		});
 		// fetch search content

@@ -81,11 +81,6 @@ export default class DissencePlaylistItem extends Component {
 				>
 					Remove
 				</MenuItem>
-				<MenuItem
-					onClick={() => playlistController.bumpSelected(this.props.index)}
-				>
-					Bump
-				</MenuItem>
 			</SimpleMenu>
 		);
 	}

@@ -14,6 +14,7 @@ namespace server
         private Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private List<EndPoint> endpoints = new List<EndPoint>();
+        private string currentPlayingFile = "";
 
         public AudioServer()
         {
@@ -27,8 +28,9 @@ namespace server
 
         public void BroadcastByFileName(string filename, Channel channel)
         {
+            currentPlayingFile = filename;
             List<byte[]> samples = AudioExtractor.Extract(filename);
-            BroadcastSamples(samples, channel);
+            BroadcastSamples(samples, channel, filename);
         }
 
         private void Listen()
@@ -73,32 +75,19 @@ namespace server
             }
         }
 
-        private void BroadcastSamples(List<byte[]> samples, Channel channel)
+        private void BroadcastSamples(List<byte[]> samples, Channel channel, string filename)
         {
             foreach (byte[] sample in samples)
             {
                 // If the channels gets unbusy in the middle of playing an audio
                 // it means one of the users skipped the playing song.
                 // Channel skipped is changed by a recieved tcp packet from clients.
-                if (channel.IsBusy && !channel.skipped)
+                if (channel.Playing && filename == currentPlayingFile)
                 {
                     SendSampleToEndpoints(sample, channel);
                     Thread.Sleep(36);
                 }
-                // Skipped
-                else
-                {
-                    // Reset bools
-                    channel.IsBusy = false;
-                    channel.skipped = false;
-
-                    // Skip this song
-                    return;
-                }
             }
-
-            // Finished playing, tell the channel that it is done
-            channel.IsBusy = false;
         }
     }
 }

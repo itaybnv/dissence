@@ -15,27 +15,28 @@ namespace server
         public List<EndPoint> endpoints { get; }
         public BindingList<string> audioServerQueue { get; }
         public string channelName { get; set; }
-        public bool skipped { get; set; }
 
-        private bool isBusy;
-        public bool IsBusy
+        private bool playing;
+        public bool Playing
         {
-            get { return isBusy; }
+            get { return playing; }
             set
             {
                 // If before was busy, and after isn't busy
                 // it means it should go to the next audio
-                if(isBusy && !value)
+                if(playing && !value)
                 {
-                    isBusy = value;
-                    PlayAudio();
-
                     // This removes the video from videoqueue after it finished playing
                     videoQueue.RemoveAt(0);
-                    return;
-                }
+                    if(audioServerQueue.Count > 0)
+                    {
+                        PlayAudio();
 
-                isBusy = value;
+                    }
+                    else
+                    {playing = value;}
+                }
+                else { playing = value; }
             }
         }
 
@@ -43,18 +44,13 @@ namespace server
         {
             this.channelName = channelName;
 
-            IsBusy = false;
-            skipped = false;
+            Playing = false;
             videoQueue = new BindingList<Video>();
             userList = new BindingList<User>();
             endpoints = new List<EndPoint>();
             audioServerQueue = new BindingList<string>();
 
-            videoQueue.ListChanged += (sender, e) =>
-            {
-                Console.WriteLine("list changed type" + e.ListChangedType.ToString());
-                UpdatePlaylist(sender, e);
-            };
+            videoQueue.ListChanged += UpdatePlaylist;
 
             userList.ListChanged += (sender, e) =>
             {
@@ -67,7 +63,7 @@ namespace server
             audioServerQueue.ListChanged += (sender, e) =>
             {
                 // This is only in case the list was empty before 
-                if (e.ListChangedType == ListChangedType.ItemAdded && !isBusy)
+                if (e.ListChangedType == ListChangedType.ItemAdded && !playing)
                 {
                     PlayAudio();
                 }
@@ -82,7 +78,6 @@ namespace server
             {
                 try
                 {
-                    Console.WriteLine(Encoding.UTF8.GetString(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist))));
                     user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.addToPlaylist)));
                 }
                 catch (Exception error)
@@ -136,31 +131,9 @@ namespace server
                 string filename = audioServerQueue.First() + ".ogg";
                 audioServerQueue.RemoveAt(0);
 
-                isBusy = true;
-                Server.AudioServer.BroadcastByFileName(filename, this);
+                playing = true;
+                new System.Threading.Thread(() => Server.AudioServer.BroadcastByFileName(filename, this)).Start();
             }
-            // else do nothing
-        }
-
-        public void SkipAudio()
-        {
-            //// Skip the audio for each client
-            //Dictionary<string, object> data = new Dictionary<string, object>();
-            //foreach (User user in userList)
-            //{
-            //    try
-            //    {
-            //        user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.skipAudio)));
-            //    }
-            //    catch (Exception error)
-            //    {
-            //        userList.Remove(user);
-            //        Console.WriteLine(Server.GetLineAndFile() + error.Message);
-            //    }
-            //}
-
-            // Finished playing / skipped
-            UpdatePlaylist(null, null);
         }
 
         public void RemoveAudio(int index)

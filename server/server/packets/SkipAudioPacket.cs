@@ -14,10 +14,7 @@ namespace server.packets
 
         public override ResponsePacket Execute(User user)
         {
-            user.currentChannel.skipped = true;
-            // The actual audio skip happens in the udp socket,
-            // so all that is left to do is update the UI for everyone
-            user.currentChannel.SkipAudio();
+            user.currentChannel.Playing = false;
             return null;
         }
     }

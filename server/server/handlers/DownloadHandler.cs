@@ -29,7 +29,14 @@ namespace server
                 ytdl.VideoUrl = $"https://www.youtube.com/watch?v={id}";
 
                 // Subscribe to console output
-                ytdl.StandardOutputEvent += (sender, output) => Console.WriteLine("YTDL: " + output);
+                ytdl.StandardOutputEvent += (sender, output) => 
+                {
+                    if (output.Contains("[download]"))
+                    {
+                        Console.WriteLine("YTDL: " + output);
+                    }
+                };
+
                 ytdl.StandardErrorEvent += (sender, errorOutput) => 
                 {
                     throw new Exception(errorOutput);
