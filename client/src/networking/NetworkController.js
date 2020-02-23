@@ -22,7 +22,9 @@ class NetworkController {
 				// try in case there are no eventhandlers registered
 				// for the packet type
 				try {
-					this.eventHandlers[packetType](data);
+					if (this.eventHandlers[packetType] !== null) {
+						this.eventHandlers[packetType].forEach(handler => handler(data));
+					}
 				} catch (error) {
 					console.error(error);
 				}
@@ -74,7 +76,11 @@ class NetworkController {
 	// event group (type => 200) and their callback will get called when the type
 	// they specified comes in to the eventQueue
 	registerEventHandler = (handler, type) => {
-		this.eventHandlers[type] = handler;
+		if (!this.eventHandlers[type]) {
+			this.eventHandlers[type] = [];
+		}
+
+		this.eventHandlers[type].push(handler);
 	};
 
 	registerCloseHandler = handler => {
