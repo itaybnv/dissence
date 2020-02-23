@@ -22,8 +22,8 @@ namespace server
             get { return playing; }
             set
             {
-                // If before was busy, and after isn't busy
-                // it means it should go to the next audio
+                // playing is the previous value, and value is the new one
+                // if it was playing, and the new value is no longer playing
                 if(playing && !value)
                 {
                     // This removes the video from videoqueue after it finished playing
@@ -96,6 +96,23 @@ namespace server
                 try
                 {
                     user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.updateNickname)));
+                }
+                catch (Exception error)
+                {
+                    userList.Remove(user);
+                    Console.WriteLine(Server.GetLineAndFile() + error.Message);
+                }
+            }
+        }
+
+        public void UpdateSkipAudio()
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            foreach (User user in userList)
+            {
+                try
+                {
+                    user.socket.Send(PacketEncoding.EncodeResponsePacket(new packets.ResponsePacket(data, PacketType.skipAudio)));
                 }
                 catch (Exception error)
                 {

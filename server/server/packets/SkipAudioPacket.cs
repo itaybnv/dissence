@@ -15,6 +15,11 @@ namespace server.packets
         public override ResponsePacket Execute(User user)
         {
             user.currentChannel.Playing = false;
+
+            // Tell all clients to delete the audio buffer
+            System.Threading.Thread.Sleep(1);
+            user.currentChannel.UpdateSkipAudio();
+
             return null;
         }
     }

@@ -2,13 +2,12 @@ import networkController from "../networking/NetworkController";
 import PacketType from "../misc/PacketType";
 
 class PlaylistController {
-	skipHandler = null;
 	registerEventHandler = handler => {
 		networkController.registerEventHandler(handler, PacketType.ADD_TO_PLAYLIST);
 	};
 
 	registerSkipHandler = handler => {
-		this.skipHandler = handler;
+		networkController.registerEventHandler(handler, PacketType.SKIP_AUDIO);
 	};
 
 	downloadToPlaylist = video =>
@@ -32,10 +31,7 @@ class PlaylistController {
 		new Promise(resolve => {
 			networkController
 				.send(Buffer.from("{}"), PacketType.SKIP_AUDIO)
-				.then(() => {
-					this.skipHandler();
-					resolve();
-				});
+				.then(resolve);
 		});
 	};
 
