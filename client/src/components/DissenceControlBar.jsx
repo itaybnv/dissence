@@ -18,8 +18,15 @@ export default class DissenceControlBar extends Component {
 		this.state = {
 			volumeValue: 3,
 			volumeIcon: "",
-			playIcon: "play_circle_filled",
+			playIcon: "play_circle_filled"
 		};
+
+		audioController.registerPlayHandler(playOrStop => {
+			playOrStop = JSON.parse(playOrStop.toString()).playOrStop;
+			this.setState({
+				playIcon: playOrStop ? "pause_circle_filled" : "play_circle_filled"
+			});
+		});
 	}
 
 	componentDidMount = () => {
@@ -49,15 +56,11 @@ export default class DissenceControlBar extends Component {
 	onPlay = () => {
 		// Audio is not playing
 		if (this.state.playIcon === "play_circle_filled") {
-			audioController.playAudio(true).then(() => {
-				this.setState({ playIcon: "pause_circle_filled" });
-			});
+			audioController.playAudio(true);
 		}
 		// Audio is playing
 		else {
-			audioController.playAudio(false).then(() => {
-				this.setState({ playIcon: "play_circle_filled" });
-			});
+			audioController.playAudio(false);
 		}
 	};
 
@@ -93,7 +96,10 @@ export default class DissenceControlBar extends Component {
 						/>
 					</div>
 					<div className="dissence-progress-bar-container">
-						<LinearProgress progress={this.props.progress}></LinearProgress>
+						<LinearProgress
+							progress={this.props.progress}
+							style={{ height: "6px" }}
+						></LinearProgress>
 					</div>
 				</div>
 				<div className="dissence-volume-control-container">
