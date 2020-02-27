@@ -17,7 +17,7 @@ namespace server.packets
             user.currentChannel.Playing = false;
 
             // Tell all clients to delete the audio buffer
-            System.Threading.Thread.Sleep(1);
+            System.Threading.Thread.Sleep(10);
             user.currentChannel.UpdateSkipAudio();
 
             return null;
