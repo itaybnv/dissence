@@ -18,11 +18,7 @@ namespace server
 
         public AudioServer()
         {
-            listenSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            listenSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27015));
-
-            sendSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            sendSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27016));
+            listenSocket.Bind(new IPEndPoint(IPAddress.Any, 27015));
             new Thread(Listen).Start();
         }
 
@@ -56,7 +52,7 @@ namespace server
                 {
                     Console.WriteLine(e.ToString());
                 }
- 
+                 
             }
         }
 
@@ -66,7 +62,7 @@ namespace server
             {
                 try
                 {
-                    sendSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
+                    listenSocket.BeginSendTo(sample, 0, sample.Length, SocketFlags.None, endpoint, null, null);
                 }
                 catch (Exception)
                 {
