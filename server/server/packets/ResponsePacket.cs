@@ -13,6 +13,11 @@ namespace server.packets
 
         public ResponsePacket() { }
 
+        /// <summary>
+        /// Constructs a response packet
+        /// </summary>
+        /// <param name="data">The data of the response packet</param>
+        /// <param name="responseType">The type of the response packet</param>
         public ResponsePacket(Dictionary<string, object> data, PacketType responseType)
         {
             this.data = data;

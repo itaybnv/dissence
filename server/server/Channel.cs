@@ -40,6 +40,10 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Constructs a Channel object
+        /// </summary>
+        /// <param name="channelName">The name of the channel</param>
         public Channel(string channelName)
         {
             this.channelName = channelName;
@@ -69,7 +73,12 @@ namespace server
                 }
             };
         }
-
+        
+        /// <summary>
+        /// Sends an updated playlist to all connected users
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void UpdatePlaylist(object sender, ListChangedEventArgs e)
         {
             Dictionary<string, object> data = new Dictionary<string, object>() { { "playlist", videoQueue } };
@@ -88,6 +97,11 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Sends an updated usernames list to all connected users
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void UpdateNicknames(object sender, ListChangedEventArgs e)
         {
             Dictionary<string, object> data = new Dictionary<string, object>() { {"nicknames", userList.Select(u => u.Nickname).ToList() } };
@@ -105,6 +119,9 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Notifies all users that a user pressed the skip button
+        /// </summary>
         public void UpdateSkipAudio()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -122,6 +139,12 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Notifies all users that a user pressed the play button, resulting in stopping
+        /// or playing the audio depending on the current state
+        /// </summary>
+        /// <param name="playOrStop">What to tell all the clients to do with the audio, true for start playing and 
+        /// false for stop playing</param>
         public void UpdatePlayAudio(bool playOrStop)
         {
             Dictionary<string, object> data = new Dictionary<string, object>() { { "playOrStop", playOrStop } };
@@ -139,6 +162,9 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Pop the first audio file in the queue and open a thread for distributing the audio pcms
+        /// </summary>
         public void PlayAudio()
         {
             // if queue isn't empty
@@ -153,6 +179,10 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Removes an audio file from the queue
+        /// </summary>
+        /// <param name="index">The index of the audio to remove</param>
         public void RemoveAudio(int index)
         {
             videoQueue.RemoveAt(index);

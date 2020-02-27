@@ -18,6 +18,10 @@ namespace server
         public static List<Channel> channels { get; set; }
         public static AudioServer AudioServer { get; set; }
 
+        /// <summary>
+        /// Main function.
+        /// </summary>
+        /// <param name="args">Command line arguments.</param>
         static void Main(string[] args)
         {
             // Create the default public channel
@@ -28,26 +32,34 @@ namespace server
             AudioServer = new AudioServer();
             Execute();
         }
-
+        
+        /// <summary>
+        /// Gets the file name and line in the file of the place it was called from.
+        /// Used for error logging.
+        /// </summary>
+        /// <param name="file">The file that the error occured at.</param>
+        /// <param name="lineNumber">The number of the line in the file.</param>
+        /// <returns>String with file and line of the error.</returns>
         public static string GetLineAndFile([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string file = null)
         {
             return (file + " at line " + lineNumber);
         }
 
+        /// <summary>
+        /// Initiate the server proccess, start a listening loop
+        /// and open a thread for each connecting client.
+        /// </summary>
         public static void Execute()
         {
             // Establish the local endpoint for the socket. Dns.GetHostName
             // returns the name of the host running the application
-            IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            //IPAddress ipAddr = ipHost.AddressList[0];
-            IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
+            IPAddress ipAddr = IPAddress.Any;
             const int port = 27015;
             IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
             // Creation TCP/IP Socket using
             Socket listener = new Socket(ipAddr.AddressFamily,
                          SocketType.Stream, ProtocolType.Tcp);
-            listener.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
 
             try
             {
@@ -67,7 +79,7 @@ namespace server
                     Console.WriteLine("Waiting connection ... ");
 
                     // Suspend while waiting for incoming connection Using
-                    // Accept() method the server will accept connection of client 
+                    // Accept() method the server will accept connection of client
                     Socket clientSocket = listener.Accept();
 
                     // Create user and add to channel list
@@ -86,6 +98,10 @@ namespace server
             }
         }
 
+        /// <summary>
+        /// Runs on a seperate thread and handles client communication.
+        /// </summary>
+        /// <param name="user">The user this thread handles.</param>
         public static void ClientHandler(User user)
         {
             // Contains the ip, port and other info about the client socket

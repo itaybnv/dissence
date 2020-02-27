@@ -14,6 +14,14 @@ namespace server
         public string ThumbnailUrl { get; }
         public string VideoLength { get; }
 
+        /// <summary>
+        /// Constructs a video object
+        /// </summary>
+        /// <param name="title">The title of the video</param>
+        /// <param name="channelTitle">The name of the channel that posted the video</param>
+        /// <param name="id">The video id from the youtube api</param>
+        /// <param name="thumbnailUrl">The URL of the thumbnail of the video</param>
+        /// <param name="videoLength">The video duration in ISO 8601 format</param>
         public Video(string title, string channelTitle, string id, string thumbnailUrl, string videoLength)
         {
             this.Title = title;

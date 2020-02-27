@@ -17,6 +17,11 @@ namespace server
             ytdl = new YoutubeDL();
         }
 
+        /// <summary>
+        /// Downloads a file from youtube using ytdl by its id
+        /// </summary>
+        /// <param name="id">The id of the file to download</param>
+        /// <param name="channel">The channel that requested the download</param>
         public void ById(string id, Channel channel)
         {
             // If the file doesn't already exist, download
@@ -51,6 +56,10 @@ namespace server
             channel.audioServerQueue.Add(id);
         }
 
+        /// <summary>
+        /// converts an mp3 file to an opus ogg file using ffmpeg
+        /// </summary>
+        /// <param name="id">the id of the file to convert</param>
         private void ConvertMp3ToOpusOgg(string id)
         {
             Engine ffmpeg = new Engine();

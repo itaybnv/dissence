@@ -11,6 +11,11 @@ namespace server
 {
     class AudioExtractor
     {
+        /// <summary>
+        /// Takes an ogg file and splits it down to a list of pcms 
+        /// </summary>
+        /// <param name="fileName">The full file name</param>
+        /// <returns>A list of byte arrays (pcms) that represent the full audio file</returns>
         public static List<byte[]> Extract(string fileName)
         {
             const int CHANNELS = 2;

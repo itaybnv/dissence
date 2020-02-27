@@ -21,6 +21,9 @@ namespace server
     {
         private YouTubeService youtubeService;
 
+        /// <summary>
+        /// Constructs a search handler object
+        /// </summary>
         public SearchHandler()
         {
             // Create a connection with youtube service
@@ -31,6 +34,13 @@ namespace server
             });
         }
 
+        /// <summary>
+        /// queries the youtube api for search results for <paramref name="title"/>.
+        /// limited for <paramref name="resultAmount"/> number of results.
+        /// </summary>
+        /// <param name="title" type="string">The query to search for</param>
+        /// <param name="resultAmount" type="int">the amount of results to look for</param>
+        /// <returns>A list of resulting videos for the mentioned query</returns>
         public List<Video> ByTitle(string title, int resultAmount)
         {
             List<Video> resultList = new List<Video>();

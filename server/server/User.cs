@@ -13,6 +13,11 @@ namespace server
         public Socket socket { get; }
         public Channel currentChannel { get; set; }
 
+        /// <summary>
+        /// Constructs a user object
+        /// </summary>
+        /// <param name="socket">The socket of the user</param>
+        /// <param name="currentChannel">The channel the user is in</param>
         public User(Socket socket, Channel currentChannel)
         {
             this.socket = socket;

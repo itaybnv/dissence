@@ -22,6 +22,12 @@ namespace server
             { PacketType.RemoveAudio, typeof(RemoveAudioPacket) }
         };
 
+        /// <summary>
+        /// Decodes a byte array to a packet object
+        /// </summary>
+        /// <param name="packet">The byte array of the packet</param>
+        /// <param name="packetType">The type of the packet</param>
+        /// <returns>A packet object</returns>
         public static Packet DecodePacket(byte[] packet, int packetType)
         {
             Dictionary<string, object> dataDict;
@@ -49,6 +55,11 @@ namespace server
             return readyPacket;
         }
 
+        /// <summary>
+        /// Encodes a packet object to a byte array
+        /// </summary>
+        /// <param name="packet">The packet object to encode</param>
+        /// <returns>An encoded byte array</returns>
         public static byte[] EncodeResponsePacket(ResponsePacket packet)
         {
             // Type byte buffer
