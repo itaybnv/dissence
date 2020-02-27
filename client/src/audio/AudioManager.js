@@ -17,7 +17,7 @@ class AudioManager {
 		this.progressPerFrame = 0;
 
 		this.audio.openStream(
-			{ nChannels: channels, deviceId: 4 },
+			{ nChannels: channels, deviceId: this.audio.getDefaultOutputDevice() },
 			null,
 			0x2,
 			sampleRate,
@@ -40,7 +40,6 @@ class AudioManager {
 		playlistController.registerSkipHandler(() => {
 			this.audio.stop();
 			this.audio.clearOutputQueue();
-			console.log("clear");
 			this.audio.start();
 		});
 	}
