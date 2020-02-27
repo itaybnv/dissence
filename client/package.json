@@ -1,53 +1,77 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "main": "public/electron.js",
-  "private": true,
-  "dependencies": {
-    "arraybuffer-to-buffer": "0.0.7",
-    "async-lock": "^1.2.2",
-    "audify": "^1.5.1",
-    "dgram": "^1.0.1",
-    "electron-is-dev": "^1.1.0",
-    "html-entities": "^1.2.1",
-    "node-sass": "^4.13.0",
-    "react": "^16.11.0",
-    "react-custom-scrollbars": "^4.2.1",
-    "react-dom": "^16.11.0",
-    "react-scripts": "^3.3.0",
-    "react-ticker": "^1.2.1",
-    "rmwc": "^5.7.1",
-    "wait-queue": "^1.1.2"
-  },
-  "scripts": {
-    "react-start": "react-scripts start",
-    "react-build": "react-scripts build",
-    "dev": "concurrently \"npm run react-start\" \"wait-on http://localhost:3000/ && electron .\"",
-    "electron": "electron .",
-    "electron-pack": "electron-builder",
-    "build": "npm run react-build && npm run electron-pack",
-    "rebuild": "electron-rebuild -f -o node-portaudio,node-opus"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "concurrently": "^5.0.0",
-    "electron": "^7.1.5",
-    "electron-builder": "^22.1.0",
-    "electron-rebuild": "^1.8.8",
-    "wait-on": "^3.3.0"
-  }
+	"name": "client",
+	"version": "0.1.0",
+	"main": "public/electron.js",
+	"homepage": "./",
+	"private": true,
+	"dependencies": {
+		"arraybuffer-to-buffer": "0.0.7",
+		"async-lock": "^1.2.2",
+		"audify": "^1.5.1",
+		"dgram": "^1.0.1",
+		"electron-is-dev": "^1.1.0",
+		"html-entities": "^1.2.1",
+		"node-sass": "^4.13.0",
+		"react": "^16.11.0",
+		"react-custom-scrollbars": "^4.2.1",
+		"react-dom": "^16.11.0",
+		"react-scripts": "^3.3.0",
+		"react-ticker": "^1.2.1",
+		"rmwc": "^5.7.1",
+		"wait-queue": "^1.1.2"
+	},
+	"scripts": {
+		"react-start": "react-scripts start",
+		"react-build": "react-scripts build",
+		"dev": "concurrently \"npm run react-start\" \"wait-on http://localhost:3000/ && electron .\"",
+		"electron": "electron .",
+		"electron-pack": "electron-builder",
+		"build": "npm run react-build && npm run electron-pack",
+		"rebuild": "electron-rebuild -f -o node-portaudio,node-opus"
+	},
+	"build": {
+		"appId": "com.itaybnv.dissence",
+		"productName": "Dissence",
+		"files": [
+			"build/**/*",
+			"node_modules/**/*"
+		],
+		"nsis": {
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		},
+		"win": {
+			"target": [
+				"nsis",
+				"zip"
+			],
+			"publisherName": "Itay Benvenisiti"
+		},
+		"mac": {
+			"target": "dmg",
+			"category": "public.app-category.social-networking"
+		}
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"concurrently": "^5.0.0",
+		"electron": "^7.1.5",
+		"electron-builder": "^22.1.0",
+		"electron-rebuild": "^1.8.8",
+		"wait-on": "^3.3.0"
+	}
 }
