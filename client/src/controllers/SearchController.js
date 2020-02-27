@@ -5,7 +5,7 @@ const Entities = require("html-entities").AllHtmlEntities;
 class SearchController {
 	ByTitle = query =>
 		new Promise(resolve => {
-			let data = { query: query, amount: 21 };
+			let data = { query: query, amount: 9 };
 			let dataBuffer = Buffer.from(JSON.stringify(data));
 			networkController
 				.send(dataBuffer, PacketType.GET_SEARCH_RESULT)
