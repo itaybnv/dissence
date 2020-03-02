@@ -54,9 +54,9 @@ class AudioManager {
 		} catch (error) {}
 	};
 
-	connect = channelName =>
+	connect = (channelName, ip) =>
 		new Promise((resolve, reject) => {
-			this.client.send(channelName, 27015, "127.0.0.1", error => {
+			this.client.send(channelName, 27015, ip, error => {
 				if (error) {
 					reject(error);
 					this.client.close();

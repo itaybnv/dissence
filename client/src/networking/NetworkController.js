@@ -32,7 +32,7 @@ class NetworkController {
 		});
 	}
 
-	connect = () => this.socket.connect("127.0.0.1", 27015);
+	connect = (ip) => this.socket.connect(ip, 27015);
 
 	send = (buffer, packetType) => {
 		// Convert packet length from int to buffer

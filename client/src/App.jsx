@@ -38,14 +38,15 @@ class App extends Component {
 		nickname: "",
 		nicknames: [],
 		playlist: [],
-		progress: 0
+		progress: 0,
+		ip: "127.0.0.1"
 	};
 
 	connectToServer = () =>
 		new Promise((resolve, reject) => {
 			networkController
-				.connect()
-				.then(() => audioManager.connect("public"))
+				.connect(this.state.ip)
+				.then(() => audioManager.connect("public", this.state.ip))
 				.then(() => {
 					this.setState({ connected: true });
 					resolve();
