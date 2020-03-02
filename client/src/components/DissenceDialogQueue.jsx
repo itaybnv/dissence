@@ -27,3 +27,18 @@ export const nicknameDialog = () =>
 			})
 			.then(res => resolve(res));
 	});
+
+export const ipDialog = () => {
+	new Promise(resolve => {
+		queue
+			.prompt({
+				title: "Enter ip address",
+				acceptLabel: "Submit",
+				cancelLabel: "Quit",
+				inputProps: {
+					outlined: true
+				}
+			})
+			.then(res => resolve(res));
+	});
+};
