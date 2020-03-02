@@ -28,7 +28,7 @@ export const nicknameDialog = () =>
 			.then(res => resolve(res));
 	});
 
-export const ipDialog = () => {
+export const ipDialog = () =>
 	new Promise(resolve => {
 		queue
 			.prompt({
@@ -39,6 +39,11 @@ export const ipDialog = () => {
 					outlined: true
 				}
 			})
-			.then(res => resolve(res));
+			.then(res => {
+				if (/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(res)) {
+					resolve(res);
+				} else {
+					ipDialog().then(resolve);
+				}
+			});
 	});
-};

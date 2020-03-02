@@ -24,7 +24,8 @@ import "@rmwc/circular-progress/circular-progress.css";
 import {
 	queue,
 	nicknameDialog,
-	connectionErrorDialog
+	connectionErrorDialog,
+	ipDialog
 } from "./components/DissenceDialogQueue";
 import playlistController from "./controllers/PlaylistController";
 import audioManager from "./audio/AudioManager";
@@ -150,8 +151,33 @@ class App extends Component {
 			});
 		});
 
-		this.connectToServer().then(this.initialActions);
+		this.getIpAddress()
+			.then(() => {
+				// user entered an ip address
+				this.connectToServer()
+					.then(this.initialActions)
+					.catch();
+			})
+			.catch((ex) => {
+				// user pressed quit
+				// const electron = window.require("electron");
+				// electron.remote.app.quit();
+
+				console.log(ex)
+			});
 	}
+
+	getIpAddress = () =>
+		new Promise((resolve, reject) => {
+			ipDialog().then(res => {
+				if (res) {
+					this.setState({ ip: res });
+					resolve();
+				} else {
+					reject();
+				}
+			});
+		});
 
 	getSearchContent = () => {
 		if (this.state.results.length === 0) {
@@ -177,7 +203,11 @@ class App extends Component {
 	render() {
 		if (this.state.connected === null) {
 			// not yet connected or not connected
-			return <div></div>;
+			return (
+				<div>
+					<DialogQueue dialogs={queue.dialogs} preventOutsideDismiss />
+				</div>
+			);
 		} else {
 			// either connected or not, if not the dialog box will appear
 			return (
